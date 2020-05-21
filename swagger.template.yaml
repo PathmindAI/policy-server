@@ -1,0 +1,142 @@
+swagger: "2.0"
+
+{{info}}
+
+basePath: "/api"
+tags:
+  - name: "Prediction"
+    description: "Access policy to predict actions from states"
+  - name: "Authentication"
+    description: "Log in and out of our service"
+  - name: "Models"
+    description: "Endpoints to update the policy"
+  - name: "Docs"
+    description: "Documentation endpoints"
+  - name: "Clients"
+    description: "Download SDKs in several languages."
+schemes:
+  - "https"
+  - "http"
+
+paths:
+  /model:
+    post:
+      summary: "Post a TensorFlow SavedModel (.zip), PyTorch (.pt, .pth)."
+      operationId: "api.save_model"
+      tags:
+        - "Models"
+      consumes:
+        - "multipart/form-data"
+      parameters:
+        - in: "formData"
+          name: "model_file"
+          type: "file"
+          description: "The model file to upload."
+      responses:
+        "200":
+          description: "Posted valid model"
+        "405":
+          description: "Invalid input"
+      security:
+        - basicAuth: []
+  /preprocessor:
+    post:
+      summary: "Post a preprocessor Python script. Needs to have a function called 'preprocess' in that file."
+      operationId: "api.save_preprocessor"
+      tags:
+        - "Models"
+      consumes:
+        - "multipart/form-data"
+      parameters:
+        - in: "formData"
+          name: "preprocessor_file"
+          type: "file"
+          description: "The preprocessor file to upload."
+      responses:
+        "200":
+          description: "Posted valid preprocessor"
+        "405":
+          description: "Invalid input"
+      security:
+        - basicAuth: []
+  /outputmapper:
+    post:
+      summary: "JSON file mapping actions to meanings."
+      operationId: "api.save_output_mapper"
+      tags:
+        - "Models"
+      consumes:
+        - "multipart/form-data"
+      parameters:
+        - in: "formData"
+          name: "output_mapper_file"
+          type: "file"
+          description: "Output mapper YAML file."
+      responses:
+        "200":
+          description: "Posted valid output mapper"
+        "405":
+          description: "Invalid input"
+      security:
+        - basicAuth: []
+  /predict:
+    post:
+      tags:
+      - "Prediction"
+      summary: "Predict a new action for the current state"
+      operationId: "api.predict"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "observation"
+        description: "Observation to be fed into the policy to receive the next action"
+        required: true
+        schema:
+          $ref: "#/definitions/Observation"
+      responses:
+        "200":
+          description: "Successfully computed next action"
+          schema:
+            $ref: "#/definitions/Prediction"
+        "405":
+          description: "Invalid input"
+      security:
+        - basicAuth: []
+  /clients:
+    get:
+      tags:
+        - "Clients"
+      operationId: "api.clients"
+      summary: "Returns zip file with Python and Java client SDKs for this server."
+      produces:
+        - "application/zip"
+      responses:
+        200:
+          description: A zip file with clients.
+          schema:
+            type: file
+      security:
+        - basicAuth: []
+
+securityDefinitions:
+  basicAuth:
+    type: "basic"
+    x-basicInfoFunc: api.basic_auth
+
+definitions: 
+  Prediction:
+    type: "object"
+    properties:
+      action:
+        type: "integer"
+        format: "int32"
+      meaning:
+        type: "string"
+    example:
+      meaning: "meaning"
+      action: 0
+ 
+{{observation}}
