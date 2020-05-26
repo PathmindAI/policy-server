@@ -1,16 +1,7 @@
-info:
-  description: "This is a simple showcase of generating a policy server API for Pathmind's\
-    \ Lagor Proof of Concept."
-  version: "0.1"
-  title: "Pathmind LPoC policy prediction service"
-  contact:
-    email: "info@pathmind.com"
-
 Observation:
   type: "object"
   required:
     - id
-    - name
     - coordinates
     - has_left_neighbour
     - has_up_neighbour
@@ -21,49 +12,62 @@ Observation:
   properties:
     id:
       type: "integer"
-      format: "int32"
       example: 0
+      minimum: 0
+      maximum: 10
       description: "Table ID"
-    name:
-      type: "string"
-      example: "pt07_c"
-      description: "Name of the node the table is on."
     has_left_neighbour:
       type: "boolean"
-      description: "Is there a node available to the left?"
       example: True
+      description: "Is there a node available to the left?"
     is_left_free:
       type: "boolean"
-      description: "Is the leftward node free?"
       example: False
+      description: "Is the leftward node free?"
     has_up_neighbour:
       type: "boolean"
+      example: True
+      description: "Is there a node available going up?"
     is_up_free:
       type: "boolean"
+      example: True
+      description: "Is the upward node free?"
     has_right_neighbour:
       type: "boolean"
+      example: False
+      description: "Is there a node available to the right?"
     is_right_free:
       type: "boolean"
+      example: False
+      description: "Is the rightward node free?"
     has_down_neighbour:
       type: "boolean"
+      example: True
+      description: "Is there a node available going down?"
     is_down_free:
       type: "boolean"
+      example: True
+      description: "Is the downward node free?"
     coordinates:
       type: "array"
       example:
       - 1
       - 1
+      description: "Coordinates of the agent in the factory as pair of integers"
       items:
         type: "integer"
       maxItems: 2
       minItems: 2
     has_core:
       type: "boolean"
+      example: True
+      description: "Does this table currently have a core?"
     target:
       type: "array"
       example:
       - 6
       - 2
+      description: "Coordinates of the core's target as pair of integers"
       items:
         type: "integer"
       maxItems: 2

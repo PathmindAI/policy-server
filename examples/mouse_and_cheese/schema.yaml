@@ -1,10 +1,3 @@
-info:
-  description: "Mouse and Cheese example"
-  version: "0.1"
-  title: "Pathmind Mouse and Cheese policy prediction service"
-  contact:
-    email: "info@pathmind.com"
-
 Observation:
   type: "object"
   required:
@@ -15,9 +8,13 @@ Observation:
       type: "number"
       format: "float"
       example: 1
+      minimum: 0
+      maximum: 5
       description: "Vertical mouse position ('row') between 0 and 5"
     mouse_col:
       type: "number"
       format: "float"
       example: 2
+      minimum: 0
+      maximum: 5
       description: "Horizontal mouse position ('col') between 0 and 5"

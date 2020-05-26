@@ -65,3 +65,13 @@ sources/
 site/
 
 .vscode
+
+keys/
+
+clients/
+models/
+
+preprocessor.py
+output_mapper.yaml
+schema.yaml
+swagger.yaml

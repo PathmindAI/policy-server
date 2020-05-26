@@ -1,8 +1,29 @@
 swagger: "2.0"
 
-{{info}}
+info:
+  version: {{version}}
+  title: {{title}}
+  contact:
+    email: "info@pathmind.com"
 
-basePath: "/api"
+definitions:
+  Prediction:
+    type: "object"
+    properties:
+      action:
+        type: "integer"
+        format: "int32"
+      meaning:
+        type: "string"
+      probability:
+        type: "number"
+        format: "float"
+    example:
+      meaning: "meaning"
+      action: 0
+
+{{observation}}
+
 tags:
   - name: "Prediction"
     description: "Access policy to predict actions from states"
@@ -14,6 +35,7 @@ tags:
     description: "Documentation endpoints"
   - name: "Clients"
     description: "Download SDKs in several languages."
+
 schemes:
   - "https"
   - "http"
@@ -110,9 +132,9 @@ paths:
       tags:
         - "Clients"
       operationId: "api.clients"
-      summary: "Returns zip file with Python and Java client SDKs for this server."
+      summary: "Returns zip file with Python, Java, Scala and R client SDKs for this server."
       produces:
-        - "application/zip"
+        - "application/octet-stream"
       responses:
         200:
           description: A zip file with clients.
@@ -125,18 +147,3 @@ securityDefinitions:
   basicAuth:
     type: "basic"
     x-basicInfoFunc: api.basic_auth
-
-definitions: 
-  Prediction:
-    type: "object"
-    properties:
-      action:
-        type: "integer"
-        format: "int32"
-      meaning:
-        type: "string"
-    example:
-      meaning: "meaning"
-      action: 0
- 
-{{observation}}

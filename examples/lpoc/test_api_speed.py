@@ -1,6 +1,7 @@
+"""This assumes the server is fully configured for the LPoC example"""
 import timeit
 import requests
-import json
+
 
 data = {
   "coordinates": [
@@ -24,12 +25,13 @@ data = {
   ]
 }
 
+
 def predict():
-    return requests.post("http://0.0.0.0:8080/api/predict", auth=("foo", "bar"), json=data)
+    return requests.post("https://localhost:8080/api/predict", verify=False, auth=("foo", "bar"), json=data)
+
 
 predict()
-
 number = 1000
-res = timeit.timeit(predict, number=number)
+res = timeit.timeit(predict, number=1000)
 print(f"A total of {number} requests took {res} milliseconds to process on average.")
 

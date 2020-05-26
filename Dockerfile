@@ -11,6 +11,6 @@ COPY . /usr/src/app
 
 EXPOSE 8080
 
-ENTRYPOINT ["python"]
+ENTRYPOINT ["gunicorn"]
 
-CMD ["app.py"]
+CMD ["app:app", "-b", ":8080", "--log-level", "debug", "-w", "4"]
