@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 import json
 import yaml
 import requests
@@ -95,7 +96,28 @@ def run_the_app():
         predict_button = st.button("Get prediction")
         if obs and predict_button:
             response = predict(obs, auth).json()
-            st.text(f"Action: {response.get('action')}, Meaning: {response.get('meaning')}")
+            st.text(
+                f"Action: {response.get('action')}, "
+                f"Meaning: {response.get('meaning')}, "
+                f"Probability: {response.get('probability'):.2f} "
+            )
+
+        compute_action_distro = st.checkbox(label="What's the variance of my actions?", value=False)
+        if compute_action_distro and obs:
+            distro = {}
+            for _ in range(100):
+                # TODO: break when len(dict) contains number of actions keys
+                response = predict(obs, auth).json()
+                distro[response.get('meaning')] = response.get('probability')
+            distro = dict(sorted(distro.items(), key=lambda x: x[0].lower()))
+
+            import matplotlib.pyplot as plt
+            import numpy as np
+            arr = np.asarray(list(distro.values()))
+            x_range = np.arange(len(distro))
+            plt.bar(x_range, arr)
+            plt.xticks(x_range, list(distro.keys()))
+            st.pyplot(plt)
 
 
 def predict(observation, auth):
@@ -103,6 +125,7 @@ def predict(observation, auth):
 
 
 def upload_model(model_file, auth):
+    os.makedirs(config.MODEL_FOLDER, exist_ok=True)
     files = {'model_file': open(model_file, 'rb')}
     return requests.post(f"{BASE_URL}/model", files=files, auth=auth)
 
