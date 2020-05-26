@@ -34,6 +34,8 @@ for observation inputs is generated on the fly as well (frontend for backend app
 We also visualize the action distribution for a given observation, by probing the API,
 which is another feature that should make it into the Pathmind app.
 
+Lastly, we also auto-generate a CLI from `generate.py` using Google's `fire` library.
+
 ## Install
 
 ```bash
