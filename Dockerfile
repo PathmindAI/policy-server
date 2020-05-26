@@ -13,4 +13,4 @@ EXPOSE 8080
 
 ENTRYPOINT ["gunicorn"]
 
-CMD ["app:app", "-b", ":8080", "--log-level", "debug", "-w", "4"]
+CMD ["app:app", "-b", ":8080", "-w", "4"]
