@@ -3,7 +3,7 @@ from config import *
 import yaml
 import zipfile
 import tensorflow as tf
-from typing import List
+from typing import List, Optional
 
 # We set a few global variables here for the running app to access.
 MODEL = None
@@ -28,7 +28,7 @@ def get_preprocessor():
     return preprocess
 
 
-def get_output_mapper():
+def get_output_mapper() -> Optional[dict]:
     """Load the output mapping. Caches the result."""
     global OUTPUT_MAPPER
     if OUTPUT_MAPPER:
@@ -42,6 +42,11 @@ def get_output_mapper():
         except yaml.YAMLError as exc:
             raise exc
     return OUTPUT_MAPPER
+
+
+def get_num_actions() -> Optional[int]:
+    mapper: Optional[dict] = get_output_mapper()
+    return len(mapper) if mapper else None
 
 
 def save_file(file_object, save_to: str, allowed_extensions: List[str], is_model: bool = False):
