@@ -1,5 +1,3 @@
-# Pathmind Policy Server 
-
 ![pathmind policy server](./assets/policy_server.jpg)
 
 ## Overview
