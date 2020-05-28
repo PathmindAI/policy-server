@@ -1,9 +1,9 @@
-from utils import get_model, save_file, get_preprocessor, get_output_mapper
-from config import OUTPUT_MAPPER_FILE, PREPROCESSOR_FILE, MODEL_FOLDER, USER, PASSWORD, BASE_PATH
+from utils import get_model, save_file, get_preprocessor, get_output_mapper, get_num_actions
+from config import OUTPUT_MAPPER_FILE, PREPROCESSOR_FILE, MODEL_FOLDER, USER, PASSWORD
 import os
 import tensorflow as tf
 import numpy as np
-from flask import send_from_directory, send_file
+from flask import send_file
 import zipfile
 import io
 import pathlib
@@ -57,6 +57,18 @@ def save_model(model_file):
         is_model=True)
 
 
+def distribution(observation: dict):
+    distro_dict = {}
+    num_actions = get_num_actions()
+    found_all_actions = False
+    while not found_all_actions:
+        response = predict(observation)
+        distro_dict[response.get('meaning')] = response.get('probability')
+        if len(distro_dict) is num_actions:
+            found_all_actions = True
+    return dict(sorted(distro_dict.items(), key=lambda x: x[0].lower()))
+
+
 def predict(observation: dict):
     """ Predict the next action given an observation.
 
@@ -85,8 +97,7 @@ def predict(observation: dict):
         
         global ACTION_KEY
         if not ACTION_KEY:
-            # 'action_logp', 'actions_0', 'action_prob', 'vf_preds', 'action_dist_inputs'
-            print(result.keys())
+            # keys: 'action_logp', 'actions_0', 'action_prob', 'vf_preds', 'action_dist_inputs'
             action_keys = [k for k in result.keys() if "actions" in k]
             if not action_keys:
                 return "Model has no 'actions' key", 405

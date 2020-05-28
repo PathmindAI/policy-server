@@ -127,6 +127,28 @@ paths:
           description: "Invalid input"
       security:
         - basicAuth: []
+  /distro:
+    post:
+      summary: "Get the action distribution for an observation."
+      operationId: "api.distribution"
+      tags:
+        - "Models"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "observation"
+          description: "Observation to be fed into the policy to receive the next action"
+          required: true
+          schema:
+            $ref: "#/definitions/Observation"
+      responses:
+        "200":
+          description: "Action distribution as JSON object."
+      security:
+        - basicAuth: []
   /clients:
     get:
       tags:

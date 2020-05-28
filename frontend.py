@@ -43,10 +43,11 @@ def generate_sidebar():
 
         start_server = st.sidebar.button('Start server from schema')
         if start_server:
-            # Generate yaml schema so that the server can use it to spin up the API,
-            CLI.schema(config.SCHEMA_FILE)
-            # then start the server-side subprocess.
-            start_server_process()
+            with st.spinner('Waiting for server to start'):
+                # Generate yaml schema so that the server can use it to spin up the API,
+                CLI.schema(config.SCHEMA_FILE)
+                # then start the server-side subprocess.
+                start_server_process()
 
     return schema, auth
 
@@ -104,20 +105,19 @@ def run_the_app():
 
         compute_action_distro = st.checkbox(label="What's the variance of my actions?", value=False)
         if compute_action_distro and obs:
-            distro = {}
-            for _ in range(100):
-                # TODO: break when len(dict) contains number of actions keys
-                response = predict(obs, auth).json()
-                distro[response.get('meaning')] = response.get('probability')
-            distro = dict(sorted(distro.items(), key=lambda x: x[0].lower()))
+            distro_dict: dict = distro(obs, auth).json()
 
             import matplotlib.pyplot as plt
             import numpy as np
-            arr = np.asarray(list(distro.values()))
-            x_range = np.arange(len(distro))
+            arr = np.asarray(list(distro_dict.values()))
+            x_range = np.arange(len(distro_dict))
             plt.bar(x_range, arr)
-            plt.xticks(x_range, list(distro.keys()))
+            plt.xticks(x_range, list(distro_dict.keys()))
             st.pyplot(plt)
+
+
+def distro(observation, auth):
+    return requests.post(f"{BASE_URL}/distro", json=observation, auth=auth)
 
 
 def predict(observation, auth):
