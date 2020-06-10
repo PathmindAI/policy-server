@@ -1,0 +1,292 @@
+Observation:
+  type: "object"
+  required:
+    - hour
+    - day
+    - month
+    - cost
+    - price
+    - price_forecast_0
+    - price_forecast_1
+    - price_forecast_2
+    - price_forecast_3
+    - price_forecast_4
+    - price_forecast_5
+    - price_forecast_6
+    - price_forecast_7
+    - price_forecast_8
+    - price_forecast_9
+    - price_forecast_10
+    - price_forecast_11
+    - price_forecast_12
+    - price_forecast_13
+    - price_forecast_14
+    - price_forecast_15
+    - price_forecast_16
+    - price_forecast_17
+    - price_forecast_18
+    - price_forecast_19
+    - price_forecast_20
+    - price_forecast_21
+    - price_forecast_22
+    - price_forecast_23
+    - price_forecast_24
+    - price_forecast_25
+    - price_forecast_26
+    - price_forecast_27
+    - price_forecast_28
+    - price_forecast_29
+    - price_forecast_30
+  properties:
+    hour:
+      type: "number"
+      format: "int"
+      example: 8
+      minimum: 1
+      maximum: 24
+      description: "Time of day"
+    day:
+      type: "number"
+      format: "int"
+      example: 127
+      minimum: 1
+      maximum: 365
+      description: "Day of year"
+    month:
+      type: "number"
+      format: "int"
+      example: 5
+      minimum: 1
+      maximum: 12
+      description: "Month of year"
+    cost:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: 0
+      maximum: 10000
+      description: "Rolling 30 minute cost"
+    price:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Electricity prices"
+    price_forecast_0:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 0"
+    price_forecast_1:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 1"
+    price_forecast_2:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 2"
+    price_forecast_3:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 3"
+    price_forecast_4:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 4"
+    price_forecast_5:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 5"
+    price_forecast_6:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 6"
+    price_forecast_7:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 7"
+    price_forecast_8:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 8"
+    price_forecast_9:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 9"
+    price_forecast_10:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 10"
+    price_forecast_11:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 11"
+    price_forecast_12:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 12"
+    price_forecast_13:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 13"
+    price_forecast_14:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 14"
+    price_forecast_15:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 15"
+    price_forecast_16:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 16"
+    price_forecast_17:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 17"
+    price_forecast_18:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 18"
+    price_forecast_19:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 19"
+    price_forecast_20:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 20"
+    price_forecast_21:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 21"
+    price_forecast_22:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 22"
+    price_forecast_23:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 23"
+    price_forecast_24:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 24"
+    price_forecast_25:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 25"
+    price_forecast_26:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 26"
+    price_forecast_27:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 27"
+    price_forecast_28:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 28"
+    price_forecast_29:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 29"
+    price_forecast_30:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 500
+      description: "Price forecast 30"
