@@ -71,5 +71,7 @@ keys/
 clients/
 models/
 
-output_mapper.yaml
+/preprocessor.py
+/output_mapper.yaml
+/schema.yaml
 swagger.yaml
