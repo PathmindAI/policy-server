@@ -1,0 +1,108 @@
+Observation:
+  type: "object"
+  required:
+    - manufacturing_center_0_stock
+    - manufacturing_center_1_stock
+    - manufacturing_center_2_stock
+    - manufacturing_center_0_total_vehicles
+    - manufacturing_center_1_total_vehicles
+    - manufacturing_center_2_total_vehicles
+    - manufacturing_center_0_distance
+    - manufacturing_center_1_distance
+    - manufacturing_center_2_distance
+    - manufacturing_center_0_available_vehicles
+    - manufacturing_center_1_available_vehicles
+    - manufacturing_center_2_available_vehicles
+    - current_order_amount
+  properties:
+    manufacturing_center_0_stock:
+      type: "number"
+      format: "float"
+      example: 545.5406974183593
+      minimum: 0
+      maximum: 10000
+      description: "Products in stock at manufacturing center 0"
+    manufacturing_center_1_stock:
+      type: "number"
+      format: "float"
+      example: 1278.0912733989671
+      minimum: 0
+      maximum: 10000
+      description: "Products in stock at manufacturing center 1"
+    manufacturing_center_2_stock:
+      type: "number"
+      format: "float"
+      example: 447.5298052299163
+      minimum: 0
+      maximum: 10000
+      description: "Products in stock at manufacturing center 2"
+    manufacturing_center_0_total_vehicles:
+      type: "number"
+      format: "float"
+      example: 3
+      minimum: 0
+      maximum: 3
+      description: "Total vehicles at manufacturing center 0"
+    manufacturing_center_1_total_vehicles:
+      type: "number"
+      format: "float"
+      example: 3
+      minimum: 0
+      maximum: 3
+      description: "Total vehicles in stock at manufacturing center 1"
+    manufacturing_center_2_total_vehicles:
+      type: "number"
+      format: "float"
+      example: 3
+      minimum: 0
+      maximum: 3
+      description: "Total vehicles in stock at manufacturing center 2"
+    manufacturing_center_0_distance:
+      type: "number"
+      format: "float"
+      example: 305254.95569252665
+      minimum: 0
+      maximum: 1000000
+      description: "Distributor distance from manufacturing center 0"
+    manufacturing_center_1_distance:
+      type: "number"
+      format: "float"
+      example: 457184.463
+      minimum: 0
+      maximum: 1000000
+      description: "Distributor distance from manufacturing center 1"
+    manufacturing_center_2_distance:
+      type: "number"
+      format: "float"
+      example: 894572.365
+      minimum: 0
+      maximum: 1000000
+      description: "Distributor distance from manufacturing center 2"
+    manufacturing_center_0_available_vehicles:
+      type: "number"
+      format: "float"
+      example: 3
+      minimum: 0
+      maximum: 3
+      description: "Available vehicles at manufacturing center 0"
+    manufacturing_center_1_available_vehicles:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 3
+      description: "Available vehicles at manufacturing center 1"
+    manufacturing_center_2_available_vehicles:
+      type: "number"
+      format: "float"
+      example: 2
+      minimum: 0
+      maximum: 3
+      description: "Available vehicles at manufacturing center 2"
+    current_order_amount:
+      type: "number"
+      format: "float"
+      example: 659
+      minimum: 0
+      maximum: 1000
+      description: "Current order amount"
