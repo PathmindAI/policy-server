@@ -1,52 +1,44 @@
 Observation:
   type: "object"
   required:
+    - minute
     - hour
     - day
     - month
-    - 30_minute_cost
     - price
-    - total_cost
   properties:
+    minute:
+      type: "number"
+      format: "int"
+      example: 30
+      minimum: 0
+      maximum: 60
+      description: "Minute of day"
     hour:
       type: "number"
       format: "int"
       example: 8
-      minimum: 1
-      maximum: 24
-      description: "Time of day"
+      minimum: 0
+      maximum: 23
+      description: "Hour of day"
     day:
       type: "number"
       format: "int"
       example: 127
-      minimum: 1
-      maximum: 365
+      minimum: 0
+      maximum: 364
       description: "Day of year"
     month:
       type: "number"
       format: "int"
       example: 5
-      minimum: 1
-      maximum: 12
-      description: "Month of year"
-    30_minute_cost:
-      type: "number"
-      format: "float"
-      example: 123.45
       minimum: 0
-      maximum: 10000
-      description: "Rolling 30 minute cost"
+      maximum: 11
+      description: "Month of year"
     price:
       type: "number"
       format: "float"
       example: 123.45
       minimum: -100
-      maximum: 500
+      maximum: 2000
       description: "Electricity prices"
-    total_cost:
-      type: "number"
-      format: "float"
-      example: 123.45
-      minimum: 0
-      maximum: 2000000
-      description: "Total Cost"
