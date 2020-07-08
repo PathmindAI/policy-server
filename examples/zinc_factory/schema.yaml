@@ -1,0 +1,44 @@
+Observation:
+  type: "object"
+  required:
+    - minute
+    - hour
+    - day
+    - month
+    - price
+  properties:
+    minute:
+      type: "number"
+      format: "int"
+      example: 30
+      minimum: 0
+      maximum: 60
+      description: "Minute of day"
+    hour:
+      type: "number"
+      format: "int"
+      example: 8
+      minimum: 0
+      maximum: 23
+      description: "Hour of day"
+    day:
+      type: "number"
+      format: "int"
+      example: 127
+      minimum: 0
+      maximum: 364
+      description: "Day of year"
+    month:
+      type: "number"
+      format: "int"
+      example: 5
+      minimum: 0
+      maximum: 11
+      description: "Month of year"
+    price:
+      type: "number"
+      format: "float"
+      example: 123.45
+      minimum: -100
+      maximum: 2000
+      description: "Electricity prices"
