@@ -1,0 +1,61 @@
+Observation:
+  type: "object"
+  required:
+    - RacerGreen
+    - RacerGray
+    - ExotGreen
+    - OrdersRacerGreen
+    - OrdersRacerGray
+    - OrdersExotGreen
+    - selectedProduct
+  properties:
+    RacerGreen:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 100
+      description: "Amount of RacerGreen in stock "
+    RacerGray:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 100
+      description: "Amount of RacerGray in stock"
+    ExotGreen:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 100
+      description: "Amount of ExotGreen in stock"
+    OrdersRacerGreen:
+      type: "number"
+      format: "float"
+      example: 2
+      minimum: 0
+      maximum: 20
+      description: "Amount of Orders for the RacerGreen "
+    OrdersRacerGray:
+      type: "number"
+      format: "float"
+      example: 3
+      minimum: 0
+      maximum: 20
+      description: "Amount of Orders for the RacerGray"
+    OrdersExotGreen:
+      type: "number"
+      format: "float"
+      example: 3
+      minimum: 0
+      maximum: 20
+      description: "Amount of Orders for the ExotGreen"
+    selectedProduct:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 1
+      maximum: 3
+      description: "selectedProduct"
+    
