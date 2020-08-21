@@ -76,6 +76,19 @@ gunicorn app:app -b :8080 -w 4
 for a more production-ready web server. Both variants will start the backend at
 [localhost:8080](localhost:8080), which comes with its own, self-contained UI.
 
+## Run models with tuple or continuous actions
+
+To tell Swagger to prepare a spec for a tuple model, either change `TUPLE` to `True` in `config.py` directly, or
+simply work with environment variables (preferred):
+
+```bash
+TUPLE=True python generate.py schema examples/simple_stochastic_tuple/schema.yaml
+TUPLE=True python app.py
+```
+
+Note that the same holds true for discrete vs. continuous actions, i.e. use the environment variable
+`DISCRETE_ACTIONS=False` for continuous action models (defaults to `True`).
+
 ## CLI
 
 ### Generate swagger.yaml from schema
