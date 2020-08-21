@@ -1,10 +1,13 @@
 """Basic configuration for the application."""
 import os
 
+# Prediction type configuration
+TUPLE = os.environ.get("TUPLE") if os.environ.get("TUPLE") else False
+DISCRETE_ACTIONS = os.environ.get("DISCRETE_ACTIONS") if os.environ.get("DISCRETE_ACTIONS") else True
+
 
 def base_path(local_file):
     """Join a local file with the BASE_PATH.
-
     :param local_file: relative path to file on your system.
     :return: joined path
     """
@@ -64,3 +67,93 @@ def get_server_arguments():
     kwargs['port'] = PORT
 
     return kwargs
+
+
+discrete_action = """definitions:
+  Prediction:
+    type: "object"
+    properties:
+      action:
+        type: "integer"
+        format: "int32"
+      meaning:
+        type: "string"
+      probability:
+        type: "number"
+        format: "float"
+    example:
+      meaning: "meaning"
+      action: 0
+      probability: 0.96
+"""
+
+continuous_action = """definitions:
+  Prediction:
+    type: "object"
+    properties:
+      action:
+        type: "number"
+        format: "float"
+      meaning:
+        type: "string"
+      probability:
+        type: "number"
+        format: "float"
+    example:
+      action: 1.0
+      probability: 0.96
+"""
+
+tuple_continuous = """definitions:
+  Prediction:
+    type: "object"
+    properties:
+      actions:
+        type: "array"
+        items:
+          type: "number"
+          format: "float"
+      probabilities:
+        type: "array"
+        items:
+          type: "number"
+    example:
+      actions:
+        - 0.5
+        - 2.4
+      probabilities:
+        - 0.4
+        - 0.6
+"""
+
+tuple_discrete = """definitions:
+  Prediction:
+    type: "object"
+    properties:
+      actions:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+      probabilities:
+        type: "array"
+        items:
+          type: "number"
+    example:
+      actions:
+        - 1
+        - 2
+      probabilities:
+        - 0.4
+        - 0.6
+"""
+
+def get_prediction_schema():
+    if TUPLE and DISCRETE_ACTIONS:
+        return tuple_discrete
+    elif TUPLE and not DISCRETE_ACTIONS:
+        return tuple_continuous
+    if not TUPLE and DISCRETE_ACTIONS:
+        return discrete_action
+    else:
+        return continuous_action
