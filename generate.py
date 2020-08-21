@@ -20,6 +20,8 @@ class CLI:
         template_str = template_str.replace("{{title}}", title)
         template_str = template_str.replace("{{version}}", f"\"{version}\"")
 
+        template_str = template_str.replace("{{prediction}}", config.get_prediction_schema())
+
         # Increase indentation by one level
         schema_lines = [f'  {line}' for line in schema_lines]
         observation = "".join(schema_lines)

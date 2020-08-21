@@ -6,21 +6,7 @@ info:
   contact:
     email: "info@pathmind.com"
 
-definitions:
-  Prediction:
-    type: "object"
-    properties:
-      action:
-        type: "integer"
-        format: "int32"
-      meaning:
-        type: "string"
-      probability:
-        type: "number"
-        format: "float"
-    example:
-      meaning: "meaning"
-      action: 0
+{{prediction}}
 
 {{observation}}
 
@@ -118,6 +104,32 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/Observation"
+      responses:
+        "200":
+          description: "Successfully computed next action"
+          schema:
+            $ref: "#/definitions/Prediction"
+        "405":
+          description: "Invalid input"
+      security:
+        - basicAuth: []
+  /predictdeterministic:
+    post:
+      tags:
+        - "Prediction"
+      summary: "Predict a deterministic action for the current state (for discrete, non-tuple actions)"
+      operationId: "api.predict_deterministic"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "observation"
+          description: "Observation to be fed into the policy to receive the next action"
+          required: true
+          schema:
+            $ref: "#/definitions/Observation"
       responses:
         "200":
           description: "Successfully computed next action"

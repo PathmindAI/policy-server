@@ -1,5 +1,5 @@
 from utils import get_model, save_file, get_preprocessor, get_output_mapper, get_num_actions
-from config import OUTPUT_MAPPER_FILE, PREPROCESSOR_FILE, MODEL_FOLDER, USER, PASSWORD
+from config import OUTPUT_MAPPER_FILE, PREPROCESSOR_FILE, MODEL_FOLDER, USER, PASSWORD, DISCRETE_ACTIONS, TUPLE
 import os
 import tensorflow as tf
 import numpy as np
@@ -57,7 +57,33 @@ def save_model(model_file):
         is_model=True)
 
 
+def predict_deterministic(observation: dict):
+    """Note: this is a hack, as we'd need the original 'env' used for training
+    to restore the agent. Not in itself a problem, just less convenient compared
+    to what we have now (don't need big JARs hanging around)."""
+    if not DISCRETE_ACTIONS:
+        return "Endpoint only available for discrete actions", 405
+    if TUPLE:
+        return "Endpoint only available for non-tuple scenarios"
+    max_action = None
+    max_prob = 0.0
+    actions = {}
+    while True:
+        response = predict(observation)
+        probability = response.get('probability')
+        actions[response.get('action')] = probability
+        if probability > max_prob:
+            max_prob = probability
+            max_action = response
+        if max_prob > 1 - sum(actions.values()):
+            return max_action
+
+
 def distribution(observation: dict):
+    if not DISCRETE_ACTIONS:
+        return "Endpoint only available for discrete actions", 405
+    if TUPLE:
+        return "Endpoint only available for non-tuple scenarios"
     distro_dict = {}
     num_actions = get_num_actions()
     found_all_actions = False
@@ -83,8 +109,8 @@ def predict(observation: dict):
     if not preprocess:
         return "No preprocessor available, use '/preprocessor' route to upload one", 405
     output_mapper = get_output_mapper()
-    if not output_mapper:
-        return "No output mapper available, use '/output_mapper' route to upload one", 405
+    if not output_mapper and DISCRETE_ACTIONS and not TUPLE:
+        return "No output mapper available for discrete actions, use '/output_mapper' route to upload one", 405
 
     processed_list = preprocess(observation)
     processed = np.reshape(np.asarray(processed_list), (1, len(processed_list)))
@@ -102,15 +128,24 @@ def predict(observation: dict):
             if not action_keys:
                 return "Model has no 'actions' key", 405
             ACTION_KEY = action_keys[0]  # realistically just one
-
         action_tensor = result.get(ACTION_KEY)
-        action = int(action_tensor.numpy()[0])
 
-        action_prob_tensor = result.get("action_prob")
-        action_prob = float(action_prob_tensor.numpy()[0])
-        return {"action": action, "meaning": output_mapper.get(action), "probability": action_prob}
+        conversion_type = int if DISCRETE_ACTIONS else float
+        numpy_tensor = action_tensor.numpy()
+        action_prob_tensor = result.get("action_prob").numpy()
+        if not TUPLE:
+            action = conversion_type(numpy_tensor[0])
+            probability = float(action_prob_tensor[0])
+            if DISCRETE_ACTIONS:
+                return {"action": action, "meaning": output_mapper.get(action), "probability": probability}
+            else:
+                return {"action": action, "probability": probability}
+        else:
+            actions = [conversion_type(x) for x in list(numpy_tensor)]
+            probabilities = [float(x) for x in list(numpy_tensor)]
+            return {"actions": actions, "probabilities": probabilities}
     else:
-        return {"action": 0, "meaning": output_mapper.get(0), "probability": 1.0}
+        raise ValueError("Only TensorFlow models supported at the moment.")
 
 
 def clients():
