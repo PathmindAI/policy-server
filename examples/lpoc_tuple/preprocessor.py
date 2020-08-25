@@ -1,7 +1,6 @@
 def preprocess(obs):
     res = []
     for i in range(1, 7):
-        print(i)
         pos = obs.get(f"table_{i}_node")
         one_hot_table = [0 for _ in range(33)]
         one_hot_table[pos] = 1
