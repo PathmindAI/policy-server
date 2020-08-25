@@ -11,6 +11,13 @@ MODEL_TYPE = None
 OUTPUT_MAPPER = None
 
 
+def safe_remove(file_name):
+    """Pythonic remove-if-exists."""
+    try:
+        os.remove(file_name)
+    except OSError:
+        pass
+
 def get_model():
     """Return model and type, caches the result."""
     global MODEL, MODEL_TYPE
@@ -58,8 +65,7 @@ def save_file(file_object, save_to: str, allowed_extensions: List[str], is_model
     :param is_model: if the uploaded file is a model, try to unzip and load it.
     :return: HTTP response acknowledging the upload.
     """
-    if os.path.exists(save_to):
-        os.remove(save_to)
+    safe_remove(save_to)
     extension = get_extension(file_object.filename)
     if extension in allowed_extensions:
         file_object.save(save_to)
@@ -100,3 +106,4 @@ def unzip(local_file):
         with zipfile.ZipFile(local_file, 'r') as zip_ref:
             # TODO: flatten intermediate folders.
             zip_ref.extractall(MODEL_FOLDER)
+    print(">>> Successfully unzipped model.")
