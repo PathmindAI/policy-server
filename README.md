@@ -45,6 +45,9 @@ virtualenv venv && source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+Also, make sure you have `swagger-codegen` installed on your system, 
+following [these instructions](https://swagger.io/docs/open-source-tools/swagger-codegen/).
+
 ## Run frontend (which starts the backend)
 
 Simply running
@@ -85,6 +88,8 @@ simply work with environment variables (preferred):
 TUPLE=True python generate.py schema examples/simple_stochastic_tuple/schema.yaml
 TUPLE=True python app.py
 ```
+
+The same goes for the frontend, which you should start with `TUPLE=True streamlit run frontend.py`.
 
 Note that the same holds true for discrete vs. continuous actions, i.e. use the environment variable
 `DISCRETE_ACTIONS=False` for continuous action models (defaults to `True`).
