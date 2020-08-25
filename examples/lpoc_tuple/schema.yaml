@@ -1,0 +1,88 @@
+Observation:
+  type: "object"
+  required:
+    - table_1_node
+    - table_2_node
+    - table_3_node
+    - table_4_node
+    - table_5_node
+    - table_6_node
+    - table_1_target_node
+    - table_2_target_node
+    - table_3_target_node
+    - table_4_target_node
+    - table_5_target_node
+    - table_6_target_node
+  properties:
+    table_1_node:
+      type: "integer"
+      example: 0
+      minimum: 0
+      maximum: 32
+      description: "Node ID of table 1"
+    table_2_node:
+      type: "integer"
+      example: 1
+      minimum: 0
+      maximum: 32
+      description: "Node ID of table 2"
+    table_3_node:
+      type: "integer"
+      example: 2
+      minimum: 0
+      maximum: 32
+      description: "Node ID of table 3"
+    table_4_node:
+      type: "integer"
+      example: 3
+      minimum: 0
+      maximum: 32
+      description: "Node ID of table 4"
+    table_5_node:
+      type: "integer"
+      example: 4
+      minimum: 0
+      maximum: 32
+      description: "Node ID of table 5"
+    table_6_node:
+      type: "integer"
+      example: 5
+      minimum: 0
+      maximum: 32
+      description: "Node ID of table 6"
+    table_1_target_node:
+      type: "integer"
+      example: 6
+      minimum: -1
+      maximum: 32
+      description: "Node ID of core target of table 1, choose -1 if no core"
+    table_2_target_node:
+      type: "integer"
+      example: 7
+      minimum: -1
+      maximum: 32
+      description: "Node ID of core target of table 2, choose -1 if no core"
+    table_3_target_node:
+      type: "integer"
+      example: 8
+      minimum: -1
+      maximum: 32
+      description: "Node ID of core target of table 3, choose -1 if no core"
+    table_4_target_node:
+      type: "integer"
+      example: 9
+      minimum: -1
+      maximum: 32
+      description: "Node ID of core target of table 4, choose -1 if no core"
+    table_5_target_node:
+      type: "integer"
+      example: 10
+      minimum: -1
+      maximum: 32
+      description: "Node ID of core target of table 5, choose -1 if no core"
+    table_6_target_node:
+      type: "integer"
+      example: 11
+      minimum: -1
+      maximum: 32
+      description: "Node ID of core target of table 6, choose -1 if no core"

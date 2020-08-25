@@ -3,7 +3,7 @@ import shutil
 import fire
 import config
 import subprocess
-
+from utils import safe_remove
 
 class CLI:
     """Simple wrapper class to expose to "fire" to auto-generate a command line
@@ -44,20 +44,12 @@ class CLI:
 
     @staticmethod
     def clean():
-        save_remove(config.OUTPUT_MAPPER_FILE)
-        save_remove(config.PREPROCESSOR_FILE)
-        save_remove(config.SCHEMA_FILE)
-        save_remove(config.SWAGGER_FILE)
+        safe_remove(config.OUTPUT_MAPPER_FILE)
+        safe_remove(config.PREPROCESSOR_FILE)
+        safe_remove(config.SCHEMA_FILE)
+        safe_remove(config.SWAGGER_FILE)
         shutil.rmtree(config.MODEL_FOLDER)
         os.makedirs(config.MODEL_FOLDER)
-
-
-def save_remove(file_name):
-    """Pythonic remove-if-exists."""
-    try:
-        os.remove(file_name)
-    except OSError:
-        pass
 
 
 def generate_client_for(lang):

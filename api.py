@@ -109,7 +109,7 @@ def predict(observation: dict):
     if not preprocess:
         return "No preprocessor available, use '/preprocessor' route to upload one", 405
     output_mapper = get_output_mapper()
-    if not output_mapper and DISCRETE_ACTIONS and not TUPLE:
+    if not output_mapper and DISCRETE_ACTIONS:
         return "No output mapper available for discrete actions, use '/output_mapper' route to upload one", 405
 
     processed_list = preprocess(observation)
@@ -121,29 +121,30 @@ def predict(observation: dict):
         result = model(observations=inputs, is_training=is_training_tensor, seq_lens=seq_lens_tensor,
                     prev_action=prev_action_tensor, prev_reward=prev_reward_tensor)
         
-        global ACTION_KEY
-        if not ACTION_KEY:
-            # keys: 'action_logp', 'actions_0', 'action_prob', 'vf_preds', 'action_dist_inputs'
-            action_keys = [k for k in result.keys() if "actions" in k]
-            if not action_keys:
-                return "Model has no 'actions' key", 405
-            ACTION_KEY = action_keys[0]  # realistically just one
-        action_tensor = result.get(ACTION_KEY)
+
+        # keys: 'action_logp', 'actions_0', 'action_prob', 'vf_preds', 'action_dist_inputs'
+        action_keys = [k for k in result.keys() if "actions_" in k]
+        if not action_keys:
+            return "Model has no 'actions' key", 405
+
+        action_prob_tensor = result.get("action_prob").numpy()
+        probability = float(action_prob_tensor[0])
 
         conversion_type = int if DISCRETE_ACTIONS else float
-        numpy_tensor = action_tensor.numpy()
-        action_prob_tensor = result.get("action_prob").numpy()
+
         if not TUPLE:
+            action_tensor = result.get(action_keys[0])
+            numpy_tensor = action_tensor.numpy()
             action = conversion_type(numpy_tensor[0])
-            probability = float(action_prob_tensor[0])
             if DISCRETE_ACTIONS:
                 return {"action": action, "meaning": output_mapper.get(action), "probability": probability}
             else:
                 return {"action": action, "probability": probability}
         else:
-            actions = [conversion_type(x) for x in list(numpy_tensor)]
-            probabilities = [float(x) for x in list(numpy_tensor)]
-            return {"actions": actions, "probabilities": probabilities}
+            numpy_tensors = [result.get(k).numpy() for k in action_keys]
+            actions = [conversion_type(x) for x in numpy_tensors]
+            meanings = [output_mapper.get(action) for action in actions]
+            return {"actions": actions, "meanings": meanings, "probability": probability}
     else:
         raise ValueError("Only TensorFlow models supported at the moment.")
 

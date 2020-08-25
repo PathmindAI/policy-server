@@ -113,17 +113,14 @@ tuple_continuous = """definitions:
         items:
           type: "number"
           format: "float"
-      probabilities:
-        type: "array"
-        items:
-          type: "number"
+      probability:
+        type: "number"
+        format: "float"
     example:
       actions:
         - 0.5
         - 2.4
-      probabilities:
-        - 0.4
-        - 0.6
+      probability: 0.96
 """
 
 tuple_discrete = """definitions:
@@ -135,17 +132,22 @@ tuple_discrete = """definitions:
         items:
           type: "integer"
           format: "int32"
-      probabilities:
+      meaning:
         type: "array"
         items:
-          type: "number"
+          type: "string"
+      probability:
+        type: "number"
+        format: "float"
     example:
       actions:
         - 1
         - 2
-      probabilities:
-        - 0.4
-        - 0.6
+      meanings:
+        - up
+        - down
+      probability: 0.96
+
 """
 
 def get_prediction_schema():
