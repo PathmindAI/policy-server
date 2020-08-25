@@ -97,11 +97,31 @@ def run_the_app():
         predict_button = st.button("Get prediction")
         if obs and predict_button:
             response = predict(obs, auth).json()
-            st.text(
-                f"Action: {response.get('action')}, "
-                f"Meaning: {response.get('meaning')}, "
-                f"Probability: {response.get('probability'):.2f} "
-            )
+            from config import TUPLE, DISCRETE_ACTIONS
+            if TUPLE:
+                if DISCRETE_ACTIONS:
+                    st.text(
+                        f"Actions: {response.get('actions')}, "
+                        f"Meanings: {response.get('meanings')}, "
+                        f"Probability: {response.get('probability'):.2f} "
+                    )
+                else:
+                    st.text(
+                        f"Actions: {response.get('actions')}, "
+                        f"Probability: {response.get('probability'):.2f} "
+                    )
+            else:
+                if DISCRETE_ACTIONS:
+                    st.text(
+                        f"Action: {response.get('action')}, "
+                        f"Meaning: {response.get('meaning')}, "
+                        f"Probability: {response.get('probability'):.2f} "
+                    )
+                else:
+                    st.text(
+                        f"Action: {response.get('action')}, "
+                        f"Probability: {response.get('probability'):.2f} "
+                    )
 
         compute_action_distro = st.checkbox(label="What's the variance of my actions?", value=False)
         if compute_action_distro and obs:

@@ -144,7 +144,11 @@ def predict(observation: dict):
             numpy_tensors = [result.get(k).numpy() for k in action_keys]
             actions = [conversion_type(x) for x in numpy_tensors]
             meanings = [output_mapper.get(action) for action in actions]
-            return {"actions": actions, "meanings": meanings, "probability": probability}
+            if DISCRETE_ACTIONS:
+                return {"actions": actions, "meanings": meanings, "probability": probability}
+            else:
+                return {"actions": actions, "probability": probability}
+
     else:
         raise ValueError("Only TensorFlow models supported at the moment.")
 
