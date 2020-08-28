@@ -40,7 +40,7 @@ class CLI:
         generate_client_for("python")
         generate_client_for("java")
         generate_client_for("scala")
-        generate_client_for("r")
+        #generate_client_for("r")
 
     @staticmethod
     def clean():
