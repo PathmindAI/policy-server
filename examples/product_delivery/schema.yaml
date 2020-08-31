@@ -7,13 +7,24 @@ Observation:
     - manufacturing_center_0_total_vehicles
     - manufacturing_center_1_total_vehicles
     - manufacturing_center_2_total_vehicles
-    - manufacturing_center_0_distance
-    - manufacturing_center_1_distance
-    - manufacturing_center_2_distance
-    - manufacturing_center_0_available_vehicles
-    - manufacturing_center_1_available_vehicles
-    - manufacturing_center_2_available_vehicles
-    - current_order_amount
+    - manufacturing_center_0_idle_vehicles
+    - manufacturing_center_1_idle_vehicles
+    - manufacturing_center_2_idle_vehicles
+    - distributor_0_order_amount
+    - distributor_1_order_amount
+    - distributor_2_order_amount
+    - distributor_3_order_amount
+    - distributor_4_order_amount
+    - distributor_5_order_amount
+    - distributor_6_order_amount
+    - distributor_7_order_amount
+    - distributor_8_order_amount
+    - distributor_9_order_amount
+    - distributor_10_order_amount
+    - distributor_11_order_amount
+    - distributor_12_order_amount
+    - distributor_13_order_amount
+    - distributor_14_order_amount
   properties:
     manufacturing_center_0_stock:
       type: "number"
@@ -57,52 +68,129 @@ Observation:
       minimum: 0
       maximum: 3
       description: "Total vehicles in stock at manufacturing center 2"
-    manufacturing_center_0_distance:
-      type: "number"
-      format: "float"
-      example: 305254.95569252665
-      minimum: 0
-      maximum: 1000000
-      description: "Distributor distance from manufacturing center 0"
-    manufacturing_center_1_distance:
-      type: "number"
-      format: "float"
-      example: 457184.463
-      minimum: 0
-      maximum: 1000000
-      description: "Distributor distance from manufacturing center 1"
-    manufacturing_center_2_distance:
-      type: "number"
-      format: "float"
-      example: 894572.365
-      minimum: 0
-      maximum: 1000000
-      description: "Distributor distance from manufacturing center 2"
-    manufacturing_center_0_available_vehicles:
+    manufacturing_center_0_idle_vehicles:
       type: "number"
       format: "float"
       example: 3
       minimum: 0
       maximum: 3
-      description: "Available vehicles at manufacturing center 0"
-    manufacturing_center_1_available_vehicles:
+      description: "Idle vehicles at manufacturing center 0"
+    manufacturing_center_1_idle_vehicles:
       type: "number"
       format: "float"
       example: 1
       minimum: 0
       maximum: 3
-      description: "Available vehicles at manufacturing center 1"
-    manufacturing_center_2_available_vehicles:
+      description: "Idle vehicles at manufacturing center 1"
+    manufacturing_center_2_idle_vehicles:
       type: "number"
       format: "float"
       example: 2
       minimum: 0
       maximum: 3
-      description: "Available vehicles at manufacturing center 2"
-    current_order_amount:
+      description: "Idle vehicles at manufacturing center 2"
+    distributor_0_order_amount:
       type: "number"
       format: "float"
-      example: 659
+      example: 1
       minimum: 0
-      maximum: 1000
-      description: "Current order amount"
+      maximum: 10
+      description: "Distributor 0 order amount"
+    distributor_1_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 1 order amount"
+    distributor_2_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 2 order amount"
+    distributor_3_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 3 order amount"
+    distributor_4_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 4 order amount"
+    distributor_5_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 5 order amount"
+    distributor_6_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 6 order amount"
+    distributor_7_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 7 order amount"
+    distributor_8_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 8 order amount"
+    distributor_9_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 9 order amount"
+    distributor_10_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 10 order amount"
+    distributor_11_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 11 order amount"
+    distributor_12_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 12 order amount"
+    distributor_13_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 13 order amount"
+    distributor_14_order_amount:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 10
+      description: "Distributor 14 order amount"
