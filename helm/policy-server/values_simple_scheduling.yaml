@@ -13,6 +13,9 @@ image:
     - "run"
     - "frontend.py"
 
+env:
+  TUPLE: "True"
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""

@@ -16,6 +16,9 @@ image:
     - "-w"
     - "4"
 
+env:
+  TUPLE: "True"
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
