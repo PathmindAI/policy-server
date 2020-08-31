@@ -20,6 +20,9 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+env:
+  TUPLE: "True"
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
