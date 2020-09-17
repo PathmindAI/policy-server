@@ -1,61 +1,76 @@
 Observation:
   type: "object"
   required:
-    - RacerGreen
-    - RacerGray
-    - ExotGreen
-    - OrdersRacerGreen
-    - OrdersRacerGray
-    - OrdersExotGreen
-    - selectedProduct
+    - OrderT0
+    - OrderT1
+    - OrderT2
+    - StockT0
+    - StockT1
+    - StockT2
+    - WIPT0
+    - WIPT1
+    - WIPT2
   properties:
-    RacerGreen:
+    OrderT0:
       type: "number"
       format: "float"
       example: 1
       minimum: 0
       maximum: 100
-      description: "Amount of RacerGreen in stock "
-    RacerGray:
+      description: "Products of Type 0 being orderd at the moment"
+    OrderT1:
       type: "number"
       format: "float"
       example: 1
       minimum: 0
       maximum: 100
-      description: "Amount of RacerGray in stock"
-    ExotGreen:
+      description: "Products of Type 1 being orderd at the moment"
+    OrderT2:
       type: "number"
       format: "float"
       example: 1
       minimum: 0
       maximum: 100
-      description: "Amount of ExotGreen in stock"
-    OrdersRacerGreen:
-      type: "number"
-      format: "float"
-      example: 2
-      minimum: 0
-      maximum: 20
-      description: "Amount of Orders for the RacerGreen "
-    OrdersRacerGray:
-      type: "number"
-      format: "float"
-      example: 3
-      minimum: 0
-      maximum: 20
-      description: "Amount of Orders for the RacerGray"
-    OrdersExotGreen:
-      type: "number"
-      format: "float"
-      example: 3
-      minimum: 0
-      maximum: 20
-      description: "Amount of Orders for the ExotGreen"
-    selectedProduct:
+      description: "Products of Type 2 being orderd at the moment"
+    StockT0:
       type: "number"
       format: "float"
       example: 1
-      minimum: 1
-      maximum: 3
-      description: "selectedProduct"
-    
+      minimum: 0
+      maximum: 100
+      description: "Products of Type 0 being at stock at the moment"
+    StockT1:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 100
+      description: "Products of Type 1 being at stock at the moment"
+    StockT2:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 100
+      description: "Products of Type 2 being at stock at the moment"
+    WIPT0:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 100
+      description: "Products of Type 0 being in process at the moment"
+    WIPT1:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 100
+      description: "Products of Type 1 being in process at the moment"
+    WIPT2:
+      type: "number"
+      format: "float"
+      example: 1
+      minimum: 0
+      maximum: 100
+      description: "Products of Type 2 being in process at the moment"
