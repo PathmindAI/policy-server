@@ -48,8 +48,7 @@ spec:
 #              port: http
           env:
             - name: TUPLE
-              value: {{ .Values.env.TUPLE }}
-          env:
+              value: "{{ .Values.env.TUPLE }}"
             - name: USE_DOCKER
               value: "True"
           resources:
