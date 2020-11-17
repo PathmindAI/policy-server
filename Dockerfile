@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.7
 
 ARG MODEL_PATH
 
@@ -13,6 +13,7 @@ COPY swagger-codegen /bin/
 
 RUN chmod +x /bin/swagger-codegen
 RUN pip3 install -r requirements.txt
+RUN mkdir models
 
 COPY . /usr/src/app
 
