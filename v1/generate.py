@@ -5,7 +5,6 @@ import config
 import subprocess
 from utils import safe_remove
 
-
 class CLI:
     """Simple wrapper class to expose to "fire" to auto-generate a command line
     interface for this project.

@@ -75,3 +75,6 @@ models/
 /output_mapper.yaml
 /schema.yaml
 swagger.yaml
+
+data/
+MODEL_FOLDER/

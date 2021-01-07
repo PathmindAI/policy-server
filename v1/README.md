@@ -2,14 +2,12 @@
 
 ## Overview
 
-Pathmind's policy serving solution. It leverages a open source technologies
-to quickly specify and run a lean web applications that serves one or several
-reinforcement learning policies.
-
+This is a prototype for Pathmind's policy serving solution. It leverages a few technologies
+to quickly specify and run a web application that serves reinforcement learning policies.
 
 ## How does it work?
 
-![architecture](assets/server_backend_v2.jpg)
+![architecture](assets/server_backend_v1.jpg)
 
 The user needs to specify one `YAML` file or text input that describes how an _observation_
 looks like for their model. We call this input a schema. Once the schema is provided, an
