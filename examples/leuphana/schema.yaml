@@ -1,76 +1,21 @@
-Observation:
-  type: "object"
-  required:
-    - OrderT0
-    - OrderT1
-    - OrderT2
-    - StockT0
-    - StockT1
-    - StockT2
-    - WIPT0
-    - WIPT1
-    - WIPT2
-  properties:
-    OrderT0:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 100
-      description: "Products of Type 0 being orderd at the moment"
-    OrderT1:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 100
-      description: "Products of Type 1 being orderd at the moment"
-    OrderT2:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 100
-      description: "Products of Type 2 being orderd at the moment"
-    StockT0:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 100
-      description: "Products of Type 0 being at stock at the moment"
-    StockT1:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 100
-      description: "Products of Type 1 being at stock at the moment"
+observations:
+    RacerGreen:
+        type: float
+    RacerGray:
+        type: float
+    ExotGreen:
+        type: float
+    OrdersRacerGreen:
+        type: float
+    OrdersRacerGray:
+        type: float
     StockT2:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 100
-      description: "Products of Type 2 being at stock at the moment"
-    WIPT0:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 100
-      description: "Products of Type 0 being in process at the moment"
-    WIPT1:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 100
-      description: "Products of Type 1 being in process at the moment"
-    WIPT2:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 100
-      description: "Products of Type 2 being in process at the moment"
+        type: float
+    OrdersExotGreen:
+        type: float
+    selectedProduct:
+        type: float
+
+parameters:
+    discrete: True
+    tuple: False

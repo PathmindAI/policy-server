@@ -7,6 +7,10 @@ to quickly specify and run a lean web applications that serves one or several
 reinforcement learning policies.
 
 
+ray start --head --metrics-export-port=8080
+
+
+
 ## How does it work?
 
 ![architecture](assets/server_backend_v2.jpg)

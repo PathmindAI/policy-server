@@ -1,88 +1,30 @@
-Observation:
-  type: "object"
-  required:
-    - table_1_node
-    - table_2_node
-    - table_3_node
-    - table_4_node
-    - table_5_node
-    - table_6_node
-    - table_1_target_node
-    - table_2_target_node
-    - table_3_target_node
-    - table_4_target_node
-    - table_5_target_node
-    - table_6_target_node
-  properties:
+observations:
+    # These observations need to be one-hot encoded by the client (no more preprocessing)
     table_1_node:
-      type: "integer"
-      example: 0
-      minimum: 0
-      maximum: 32
-      description: "Node ID of table 1"
+      type: List[int]
     table_2_node:
-      type: "integer"
-      example: 1
-      minimum: 0
-      maximum: 32
-      description: "Node ID of table 2"
+      type: List[int]
     table_3_node:
-      type: "integer"
-      example: 2
-      minimum: 0
-      maximum: 32
-      description: "Node ID of table 3"
+      type: List[int]
     table_4_node:
-      type: "integer"
-      example: 3
-      minimum: 0
-      maximum: 32
-      description: "Node ID of table 4"
+      type: List[int]
     table_5_node:
-      type: "integer"
-      example: 4
-      minimum: 0
-      maximum: 32
-      description: "Node ID of table 5"
+      type: List[int]
     table_6_node:
-      type: "integer"
-      example: 5
-      minimum: 0
-      maximum: 32
-      description: "Node ID of table 6"
+      type: List[int]
     table_1_target_node:
-      type: "integer"
-      example: 6
-      minimum: -1
-      maximum: 32
-      description: "Node ID of core target of table 1, choose -1 if no core"
+      type: List[int]
     table_2_target_node:
-      type: "integer"
-      example: 7
-      minimum: -1
-      maximum: 32
-      description: "Node ID of core target of table 2, choose -1 if no core"
+      type: List[int]
     table_3_target_node:
-      type: "integer"
-      example: 8
-      minimum: -1
-      maximum: 32
-      description: "Node ID of core target of table 3, choose -1 if no core"
+      type: List[int]
     table_4_target_node:
-      type: "integer"
-      example: 9
-      minimum: -1
-      maximum: 32
-      description: "Node ID of core target of table 4, choose -1 if no core"
+      type: List[int]
     table_5_target_node:
-      type: "integer"
-      example: 10
-      minimum: -1
-      maximum: 32
-      description: "Node ID of core target of table 5, choose -1 if no core"
+      type: List[int]
     table_6_target_node:
-      type: "integer"
-      example: 11
-      minimum: -1
-      maximum: 32
-      description: "Node ID of core target of table 6, choose -1 if no core"
+      type: List[int]
+
+parameters:
+  discrete: True
+  tuple: True

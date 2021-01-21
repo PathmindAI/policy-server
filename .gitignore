@@ -71,10 +71,9 @@ keys/
 clients/
 models/
 
-/preprocessor.py
-/output_mapper.yaml
-/schema.yaml
-swagger.yaml
+saved_model.zip
+clients.zip
+schema.yaml
 
 data/
 MODEL_FOLDER/

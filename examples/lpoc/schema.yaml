@@ -1,74 +1,27 @@
-Observation:
-  type: "object"
-  required:
-    - id
-    - coordinates
-    - has_left_neighbour
-    - has_up_neighbour
-    - has_right_neighbour
-    - has_down_neighbour
-    - has_core
-    - target
-  properties:
-    id:
-      type: "integer"
-      example: 0
-      minimum: 0
-      maximum: 10
-      description: "Table ID"
-    has_left_neighbour:
-      type: "boolean"
-      example: True
-      description: "Is there a node available to the left?"
-    is_left_free:
-      type: "boolean"
-      example: False
-      description: "Is the leftward node free?"
-    has_up_neighbour:
-      type: "boolean"
-      example: True
-      description: "Is there a node available going up?"
-    is_up_free:
-      type: "boolean"
-      example: True
-      description: "Is the upward node free?"
-    has_right_neighbour:
-      type: "boolean"
-      example: False
-      description: "Is there a node available to the right?"
-    is_right_free:
-      type: "boolean"
-      example: False
-      description: "Is the rightward node free?"
-    has_down_neighbour:
-      type: "boolean"
-      example: True
-      description: "Is there a node available going down?"
-    is_down_free:
-      type: "boolean"
-      example: True
-      description: "Is the downward node free?"
-    coordinates:
-      type: "array"
-      example:
-      - 1
-      - 1
-      description: "Coordinates of the agent in the factory as pair of integers"
-      items:
-        type: "integer"
-      maxItems: 2
-      minItems: 2
-    has_core:
-      type: "boolean"
-      example: True
-      description: "Does this table currently have a core?"
-    target:
-      type: "array"
-      example:
-      - 6
-      - 2
-      description: "Coordinates of the core's target as pair of integers"
-      items:
-        type: "integer"
-      maxItems: 2
-      minItems: 2
+observations:
+  id:
+    type: int
+  coordinates_0:
+    type: int
+  coordinates_1:
+    type: int
+  has_up_neighbour:
+    type: bool
+  is_up_free:
+    type: bool
+  has_right_neighbour:
+    type: bool
+  is_right_free:
+    type: bool
+  has_down_neighbour:
+    type: bool
+  is_down_free:
+    type: bool
+  has_left_neighbour:
+    type: bool
+  is_left_free:
+    type: bool
+
+parameters:
+  discrete: True
+  tuple: False
