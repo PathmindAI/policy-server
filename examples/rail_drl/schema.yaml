@@ -1,4 +1,4 @@
-observation:
+observations:
   speed_train_A:
     type: float
   speed_train_B:
