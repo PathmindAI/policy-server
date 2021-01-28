@@ -23,7 +23,7 @@ class CLI:
         generate_client_for("r")
 
     @staticmethod
-    def server(path):
+    def copy_server_files(path):
         shutil.copyfile(os.path.join(path, "saved_model.zip"), config.PATHMIND_POLICY)
         shutil.copyfile(os.path.join(path, "schema.yaml"), config.PATHMIND_SCHEMA)
 
