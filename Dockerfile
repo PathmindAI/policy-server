@@ -1,6 +1,7 @@
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
 
 RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app/models
 WORKDIR /usr/src/app
 
 COPY requirements.txt /usr/src/app/

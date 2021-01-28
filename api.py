@@ -2,34 +2,21 @@ import tensorflow as tf
 import numpy as np
 from typing import List
 from pydantic import BaseModel, create_model
-import oyaml as yaml
-from collections import OrderedDict
-from utils import unzip
-from config import PATHMIND_POLICY, PATHMIND_SCHEMA
+import config
+from fluent import sender
 
 
-unzip(PATHMIND_POLICY)
+logger = sender.FluentSender('policy_server', host='0.0.0.0', port=24224)
 
 
-with open(PATHMIND_SCHEMA, "r") as f:
-    schema: OrderedDict = yaml.safe_load(f.read())
-
-observations = schema.get("observations")
-parameters = schema.get("parameters")
-features = observations.keys()
-
-payload_data = {k: (v.get("type"), ...) for k, v in observations.items()}
-
-Payload = create_model(
+Observation = create_model(
     'Payload',
-    **payload_data
+    **config.payload_data
 )
 
-action_type = int if parameters.get("discrete") else float
 
-
-class Response(BaseModel):
-    actions: List[action_type]
+class Action(BaseModel):
+    actions: List[config.action_type]
     probability: float
 
 
@@ -44,14 +31,7 @@ class PathmindPolicy:
         self.model = self.load_policy.signatures.get("serving_default")
 
     def __call__(self, request):
-        data = request.data
-
-        # TODO: potentially slow
-        lists = [[getattr(data, obs)] if not isinstance(getattr(data, obs), List) else getattr(data, obs)
-                 for obs in observations.keys()]
-        import itertools
-        merged = list(itertools.chain(*lists))
-        array = np.asarray(merged)
+        array = np.asarray(request.data)
         op = np.reshape(array, (1, array.size))
         tensors = tf.convert_to_tensor(op, dtype=tf.float32, name='observations')
 
@@ -65,21 +45,24 @@ class PathmindPolicy:
         action_prob_tensor = result.get("action_prob").numpy()
         probability = float(action_prob_tensor[0])
 
-        if not parameters.get("tuple"):
+        if not config.parameters.get("tuple"):
             action_tensor = result.get(action_keys[0])
             numpy_tensor = action_tensor.numpy()
-            actions = [(action_type(numpy_tensor[0]))]
+            actions = [(config.action_type(numpy_tensor[0]))]
         else:
             numpy_tensors = [result.get(k).numpy() for k in action_keys]
-            actions = [action_type(x) for x in numpy_tensors]
+            actions = [config.action_type(x) for x in numpy_tensors]
 
-        return Response(actions=actions, probability=probability)
+        global logger
+        logger.emit('predict', {'observation': request.data, 'action': actions, 'probability': probability})
+
+        return Action(actions=actions, probability=probability)
 
 
 pm = PathmindPolicy()
 
 
-def _predict(payload: Payload):
+def _predict(payload: Observation):
     class Dummy:
         data = None
     dummy = Dummy()
@@ -87,13 +70,13 @@ def _predict(payload: Payload):
     return pm(dummy)
 
 
-def _predict_deterministic(payload: Payload):
+def _predict_deterministic(payload: Observation):
     """Note: this is a hack, as we'd need the original 'env' used for training
     to restore the agent. Not in itself a problem, just less convenient compared
     to what we have now (don't need big JARs hanging around)."""
-    if not parameters.get("discrete"):
+    if not config.parameters.get("discrete"):
         return "Endpoint only available for discrete actions", 405
-    if parameters.get("tuple"):
+    if config.parameters.get("tuple"):
         return "Endpoint only available for non-tuple scenarios"
 
     max_action = None
@@ -111,10 +94,10 @@ def _predict_deterministic(payload: Payload):
             return max_action
 
 
-def _distribution(payload: Payload):
-    if not parameters.get("discrete"):
+def _distribution(payload: Observation):
+    if not config.parameters.get("discrete"):
         return "Endpoint only available for discrete actions", 405
-    if parameters.get("tuple"):
+    if config.parameters.get("tuple"):
         return "Endpoint only available for non-tuple scenarios"
     distro_dict = {}
     found_all_actions = False

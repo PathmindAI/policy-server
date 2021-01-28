@@ -16,18 +16,13 @@ looks like for their model. We call this input a schema. Once the schema is prov
 `FastAPI` will generate a `pydantic`-validated, OpenAPI-compliant endpoint for any
 `saved_model.zip` model file that takes in observations as specified.
 
-### FastAPI, uvicorn and Ray serve
-
 The main work horse is the backend application that you can start locally with `uvicorn app:app`.
 This will start a uvicorn server for `FastAPI` which is internally dispatched to a `Ray serve`
 handle for predictions.
 
-### Swagger UI & documentation
-
 We leverage Swagger UI to fully describe, validate and test this API. The following endpoints
-are exposed.
+are exposed on port `8000` (unless stated otherwise): 
 
-### Endpoints
 
 - `/predict` To receive model predictions (once the first three endpoints have been used).
 - `/clients` To download SDKs in several languages (currently Python, Java, Scala, R).
@@ -35,8 +30,7 @@ are exposed.
 - `/redoc` Get `redoc` documentation for the endpoint.
 - `/predict_deterministic` Get the most likely output every time, only works for non-tuple and discrete actions.
 - `/distribution` Get the action likelihood distribution for non-tuple and discrete actions.
-
-### Frontend
+- `/metrics` This endpoint exposes Prometheus metrics on port `8080`.
 
 The frontend application found at `frontend.py` is a streamlit application that's just
 there to demonstrate (very roughly) the application flow, i.e. how to use the backend,
@@ -44,8 +38,6 @@ for integration in the Pathmind web app. One noteworthy feature is that the form
 for observation inputs is generated on the fly as well (frontend for backend approach).
 We also visualize the action distribution for a given observation, by probing the API,
 which is another feature that should make it into the Pathmind app.
-
-### CLI
 
 Lastly, we also auto-generate a CLI from `generate.py` using Google's `fire` library.
 
@@ -62,19 +54,60 @@ following [these instructions](https://swagger.io/docs/open-source-tools/swagger
 
 ## Run locally
 
-Simply run
+To run the application, put a TensorFlow SavedModel file called `saved_model.zip` next to `app.py`. In
+the same location you need to provide a `schema.yaml` file, which schematically looks as follows:
+
+```yaml
+observations:
+  id:
+    type: int
+  coordinates_0:
+    type: int
+  coordinates_1:
+    type: int
+  has_up_neighbour:
+    type: bool
+  is_up_free:
+    type: bool
+
+
+parameters:
+  discrete: True
+  tuple: False
+```
+
+In other words, you need to have `parameters` which tell the policy server whether we're dealing with `discrete`
+observations or `tuple`s. You also need to provide a schema for your `observations` according to what your
+model expects. Note that the ordering of the values is of importance, it is used by the policy server to concatenate
+the incoming values accordingly. The observation names should correspond to observation selection names in the
+web app and the `type`s are mandatory. Valid types correspond to basic numeric Python data types and `List`s
+thereof, namely the following:
+
+
+- `int`
+- `float`
+- `bool`
+- `List[int]`
+- `List[float]`
+- `List[bool]`
+
+Once you have both `saved_model.zip` and `schema.yaml` ready, you can start the policy server like this:
 
 ```commandline
 uvicorn app:app
 ```
 
-ray start --head --metrics-export-port=8080
+To prepare one of the examples that come with this repo, you can e.g. use
 
+```bash
+python generate.py copy_server_files examples/lpoc
+```
 
+and then start the `uvicorn` application.
 
 ## Run frontend (which starts the backend)
 
-Simply running
+Alternatively, you can run a little `streamlit` frontend for demo purposes like so:
 
 ```bash
 streamlit run frontend.py
@@ -86,50 +119,32 @@ but can be used with any other model. Once you hit the `Start the server from sc
 button in the UI, you can also access the backend service directly at 
 [localhost:8080](localhost:8000).
 
-## Run backend only
-
-```bash
-uvicorn app:app
-```
-
-for a more production-ready web server. Both variants will start the backend at
-[localhost:8080](localhost:8000), which comes with its own, self-contained UI.
-
-
-
-## CLI
-
-### Generate swagger.yaml from schema
-
-This also generates all clients automatically under the hood.
-
-```bash
-python generate.py schema examples/lpoc/schema.yaml
-```
-
-### Generate clients
-
-```bash
-python generate.py clients
-```
-
-### Clean all local files (reset configuration)
-
-```bash
-python generate.py clean
-```
 
 ## Docker
 
-Build the container with
+Build the image with
 
 ```bash
-docker build . -t model
-```
+ docker build . -t policy_server
+ ```
 
-then run the image with
+then run the container with
 
 ```bash
-docker run  -p 8080:8080 model
+docker run --shm-size=16GB \
+ -p 8000:8000 \
+ -p 8080:8080 \
+ -p 8256:8256 \
+ policy_server
 ```
 
+## Metrics
+
+Metrics get automatically exposed on the metrics port `8080` from Ray Serve and can be scraped
+from the `/metrics` endpoint, e.g. from a Prometheus instance. We've provided a minimal `prometheus.yml`
+in this repo as a minimal example to start a Prometheus instance locally, and e.g. feeding this
+data source into Grafana.
+
+```commandline
+prometheus --config.file=./prometheus.yml
+```

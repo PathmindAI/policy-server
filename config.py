@@ -1,6 +1,7 @@
 """Basic configuration for the application."""
 import os
-
+import oyaml as yaml
+from collections import OrderedDict
 
 USE_RAY = True
 
@@ -26,6 +27,18 @@ SWAGGER_FILE = "http://localhost:8000/openapi.json"
 LOCAL_SWAGGER = base_path("openapi.json")
 CLIENTS_ZIP = base_path("clients.zip")
 
+
+with open(PATHMIND_SCHEMA, "r") as f:
+    schema: OrderedDict = yaml.safe_load(f.read())
+
+observations = schema.get("observations")
+parameters = schema.get("parameters")
+features = observations.keys()
+action_type = int if parameters.get("discrete") else float
+
+payload_data = {k: (v.get("type"), ...) for k, v in observations.items()}
+
+
 # API Versioning
 API_PREFIX = "/api"
 API_VERSION = "0.1"
@@ -39,7 +52,7 @@ USE_DOCKER = os.environ.get("USE_DOCKER", False)
 HOST = "0.0.0.0" if USE_DOCKER else "localhost"
 if os.environ.get("HOST"):
     HOST = os.environ.get("HOST")
-PORT = os.environ.get("PORT", 8080)
+PORT = os.environ.get("PORT", 8000)
 
 
 def get_server_arguments():
