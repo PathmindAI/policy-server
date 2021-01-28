@@ -2,7 +2,7 @@
 import os
 
 
-USE_RAY = False
+USE_RAY = True
 
 
 def base_path(local_file):

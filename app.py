@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse
 import shutil
 
 import config
-from api import PathmindPolicy, Response, Payload
+from api import Response, Payload
 from api import _predict_deterministic, _distribution, _predict
 
 
@@ -15,8 +15,9 @@ app = FastAPI()
 if config.USE_RAY:
     @app.on_event("startup")
     async def startup_event():
+        from api import PathmindPolicy
 
-        ray.init(address="auto")  # Connect to the running Ray cluster.
+        ray.init(_metrics_export_port=8080)  # Initialize new ray instance
         client = serve.start(http_host=None)
 
         backend_config = serve.BackendConfig(num_replicas=4)

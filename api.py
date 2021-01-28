@@ -117,11 +117,12 @@ def _distribution(payload: Payload):
     if parameters.get("tuple"):
         return "Endpoint only available for non-tuple scenarios"
     distro_dict = {}
-    num_actions = len(_predict(payload).actions)
     found_all_actions = False
+    trials = 0
     while not found_all_actions:
+        trials += 1
         response = _predict(payload)
         distro_dict[response.actions[0]] = response.probability
-        if len(distro_dict) is num_actions:
+        if sum(distro_dict.values()) >= 0.99 or trials >= 100:
             found_all_actions = True
-    return dict(sorted(distro_dict.items(), key=lambda x: x[0].lower()))
+    return dict(sorted(distro_dict.items(), key=lambda x: str(x[0]).lower()))
