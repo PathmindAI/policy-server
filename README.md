@@ -138,6 +138,13 @@ docker run --shm-size=16GB \
  policy_server
 ```
 
+For a full production-like setup including all components outlined in the architectural diagram above,
+please make use of the `docker-compose.yaml` by running:
+
+```commandline
+docker-compose up
+```
+
 ## Metrics
 
 Metrics get automatically exposed on the metrics port `8080` from Ray Serve and can be scraped
