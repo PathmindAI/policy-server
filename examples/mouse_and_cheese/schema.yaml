@@ -1,20 +1,14 @@
-Observation:
-  type: "object"
-  required:
-    - mouse_row
-    - mouse_col
-  properties:
+# int, float, bool, str, List
+observations:
     mouse_row:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 5
-      description: "Vertical mouse position ('row') between 0 and 5"
+        type: float
     mouse_col:
-      type: "number"
-      format: "float"
-      example: 2
-      minimum: 0
-      maximum: 5
-      description: "Horizontal mouse position ('col') between 0 and 5"
+        type: float
+    mouse_row_dist:
+        type: float
+    mouse_col_dist:
+        type: float
+
+parameters:
+    discrete: True
+    tuple: False

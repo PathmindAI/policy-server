@@ -1,20 +1,9 @@
-Observation:
-  type: "object"
-  required:
-    - speed_trainA
-    - speed_trainB
-  properties:
-    speed_trainA:
-      type: "number"
-      format: "double"
-      example: 9.0225
-      minimum: 0
-      maximum: 20
-      description: "Train A Speed"
-    speed_trainB:
-      type: "number"
-      format: "double"
-      example: 16.5215
-      minimum: 0
-      maximum: 20
-      description: "Train B Speed"
+observations:
+  speed_train_A:
+    type: float
+  speed_train_B:
+    type: float
+
+parameters:
+  discrete: True
+  tuple: False
