@@ -29,6 +29,10 @@ class CLI:
         unzip(config.PATHMIND_POLICY)
 
     @staticmethod
+    def unzip():
+        unzip(config.PATHMIND_POLICY)
+
+    @staticmethod
     def clean():
         safe_remove(config.PATHMIND_POLICY)
         safe_remove(config.PATHMIND_SCHEMA)
