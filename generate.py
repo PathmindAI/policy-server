@@ -3,7 +3,7 @@ import shutil
 import fire
 import config
 import subprocess
-from utils import safe_remove
+from utils import safe_remove, unzip
 
 class CLI:
     """Simple wrapper class to expose to "fire" to auto-generate a command line
@@ -26,6 +26,11 @@ class CLI:
     def copy_server_files(path):
         shutil.copyfile(os.path.join(path, "saved_model.zip"), config.PATHMIND_POLICY)
         shutil.copyfile(os.path.join(path, "schema.yaml"), config.PATHMIND_SCHEMA)
+        unzip(config.PATHMIND_POLICY)
+
+    @staticmethod
+    def unzip():
+        unzip(config.PATHMIND_POLICY)
 
     @staticmethod
     def clean():
