@@ -1,12 +1,11 @@
-Observation:
-  type: "object"
-  required:
-    - state
-  properties:
-    state:
-      type: "integer"
-      format: "int32"
-      example: 1
-      minimum: 0
-      maximum: 2
-      description: "0 = start, 1 = intermediate, 2 = goal"
+observations:
+  state_0:
+    type: int
+  state_1:
+    type: int
+  state_2:
+    type: int
+
+parameters:
+  discrete: False
+  tuple: False

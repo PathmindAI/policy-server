@@ -3,7 +3,7 @@ import shutil
 import fire
 import config
 import subprocess
-from utils import safe_remove
+from utils import safe_remove, unzip
 
 class CLI:
     """Simple wrapper class to expose to "fire" to auto-generate a command line
@@ -11,31 +11,11 @@ class CLI:
     """
 
     @staticmethod
-    def schema(schema_file, title="Pathmind Policy Server", version=config.API_VERSION,
-               template_file=config.SWAGGER_TEMPLATE, out_file=config.SWAGGER_FILE):
-        with open(template_file, 'r') as template:
-            template_str = template.read()
-        with open(schema_file, 'r') as schema:
-            schema_lines = schema.readlines()
-        template_str = template_str.replace("{{title}}", title)
-        template_str = template_str.replace("{{version}}", f"\"{version}\"")
-
-        template_str = template_str.replace("{{prediction}}", config.get_prediction_schema())
-
-        # Increase indentation by one level
-        schema_lines = [f'  {line}' for line in schema_lines]
-        observation = "".join(schema_lines)
-        template_str = template_str.replace("{{observation}}", observation)
-        if os.path.exists(out_file):
-            os.remove(out_file)
-        with open(out_file, 'w') as out:
-            out.write(template_str)
-        # When creating a new schema, regenerate clients as well.
-        CLI.clients()
-
-    @staticmethod
     def clients():
-        shutil.rmtree("clients")
+        try:
+            shutil.rmtree("clients")
+        except:
+            pass
         os.makedirs("clients")
         generate_client_for("python")
         generate_client_for("java")
@@ -43,11 +23,21 @@ class CLI:
         #generate_client_for("r")
 
     @staticmethod
+    def copy_server_files(path):
+        shutil.copyfile(os.path.join(path, "saved_model.zip"), config.PATHMIND_POLICY)
+        shutil.copyfile(os.path.join(path, "schema.yaml"), config.PATHMIND_SCHEMA)
+        unzip(config.PATHMIND_POLICY)
+
+    @staticmethod
+    def unzip():
+        unzip(config.PATHMIND_POLICY)
+
+    @staticmethod
     def clean():
-        safe_remove(config.OUTPUT_MAPPER_FILE)
-        safe_remove(config.PREPROCESSOR_FILE)
-        safe_remove(config.SCHEMA_FILE)
-        safe_remove(config.SWAGGER_FILE)
+        safe_remove(config.PATHMIND_POLICY)
+        safe_remove(config.PATHMIND_SCHEMA)
+        safe_remove(config.LOCAL_SWAGGER)
+        safe_remove(config.CLIENTS_ZIP)
         shutil.rmtree(config.MODEL_FOLDER)
         os.makedirs(config.MODEL_FOLDER)
 

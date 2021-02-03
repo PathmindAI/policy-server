@@ -1,52 +1,18 @@
-Observation:
-  type: "object"
-  required:
-    - total_products_processed
-    - machine1_seized
-    - machine2_seized
-    - seizeDelayStage1_queue
-    - seizeDelayStage2_queue
-    - seizeDelayStage3_queue
-  properties:
-    total_products_processed:
-      type: "number"
-      format: "float"
-      example: 123
-      minimum: 0
-      maximum: 1000
-      description: "Total Products Processed"
-    machine1_seized:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 1
-      description: "Machine 1 Seized"
-    machine2_seized:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 1
-      description: "Machine 2 Seized"
-    seizeDelayStage1_queue:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 1
-      description: "Machine 1 Delay Queue"
-    seizeDelayStage2_queue:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 1
-      description: "Machine 2 Delay Queue"
-    seizeDelayStage3_queue:
-      type: "number"
-      format: "float"
-      example: 1
-      minimum: 0
-      maximum: 1
-      description: "Machine 3 Delay Queue"
+observations:
+  total_products_processed:
+    type: float
+  machine1_seized:
+    type: float
+  machine2_seized:
+    type: float
+  seizeDelayStage1_queue:
+    type: float
+  seizeDelayStage2_queue:
+    type: float
+  seizeDelayStage3_queue:
+    type: float
+
+parameters:
+  discrete: True
+  tuple: True
+
