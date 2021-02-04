@@ -4,7 +4,7 @@ from typing import List
 from pydantic import BaseModel, create_model
 import config
 from fluent import sender
-
+from fastapi import HTTPException
 
 logger = sender.FluentSender('policy_server', host='0.0.0.0', port=24224)
 
@@ -75,9 +75,9 @@ def _predict_deterministic(payload: Observation):
     to restore the agent. Not in itself a problem, just less convenient compared
     to what we have now (don't need big JARs hanging around)."""
     if not config.parameters.get("discrete"):
-        return "Endpoint only available for discrete actions", 405
+        raise HTTPException(status_code=405, detail="Endpoint only available for discrete actions")
     if config.parameters.get("tuple"):
-        return "Endpoint only available for non-tuple scenarios"
+        raise HTTPException(status_code=405, detail="Endpoint only available for non-tuple scenarios")
 
     max_action = None
     max_prob = 0.0
@@ -96,9 +96,9 @@ def _predict_deterministic(payload: Observation):
 
 def _distribution(payload: Observation):
     if not config.parameters.get("discrete"):
-        return "Endpoint only available for discrete actions", 405
+        raise HTTPException(status_code=405, detail="Endpoint only available for discrete actions")
     if config.parameters.get("tuple"):
-        return "Endpoint only available for non-tuple scenarios"
+        raise HTTPException(status_code=405, detail="Endpoint only available for non-tuple scenarios")
     distro_dict = {}
     found_all_actions = False
     trials = 0

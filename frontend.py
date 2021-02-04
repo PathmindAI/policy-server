@@ -2,82 +2,62 @@ import streamlit as st
 import json
 import yaml
 import requests
-import subprocess
-import os
 
 import config
-from generate import CLI
-
-BASE_URL = 'http://localhost:8000'
-
-
-@st.cache()
-def start_server_process():
-    # Spawns a gunicorn production web server with 4 workers.
-    cmd = "uvicorn app:app"
-    # Note: this won't work on GCP and generally this should be done differently eventually.
-    subprocess.Popen("exec " + cmd, stdout=subprocess.PIPE, shell=True)
 
 
 def run_the_app():
 
+    st.sidebar.markdown("# Server location (URL)")
+
+    url = st.sidebar.text_input("URL", "http://localhost:8000")
+
+    st.sidebar.markdown("# Server authentication")
+
+    auth = None
+    user = st.sidebar.text_input("User name")
+    password = st.sidebar.text_input("Password")
+    if user and password:
+        auth = (user, password)
+
     st.markdown("# Pathmind Policy Server")
 
-    st.markdown("## Pick your use case:")
-
-    model = st.selectbox('Which model would you like to try?',
-                                 ('leuphana', 'lpoc', 'lpoc_tuple', 'mouse_and_cheese',
-                                  'product_delivery', 'rail_drl', 'simple_scheduling',
-                                  'simple_stochastic_tuple', 'zinc_factory'))
-
-    path = os.path.abspath(f"./examples/{model}")
-    # Copy model and schema to base folder,
-    CLI.copy_server_files(path=path)
-
-    # load the schema
-    with open(config.PATHMIND_SCHEMA, 'r') as f:
-        schema_str = f.read()
-    schema = yaml.safe_load(schema_str)
-
-    start_server = st.button('Start server from schema')
-    if start_server:
-        with st.spinner('Waiting for server to start'):
-            # then start the server-side subprocess.
-            start_server_process()
+    schema = server_schema(auth, url).json()
 
     st.markdown("## Prediction")
 
     obs = generate_frontend_from_observations(schema)
     predict_button = st.button("Get prediction")
     if obs and predict_button:
-        response = predict(obs).json()
-        st.text(response)
-        print(response)
+        response = predict(obs, auth, url).json()
         st.text(
-            f"Actions: {response.get('actions')}, "
+            f"Actions: {response.get('actions')}, \n"
             f"Probability: {response.get('probability'):.2f} "
         )
 
-    compute_action_distro = st.checkbox(label="What's the variance of my actions?", value=False)
-    if compute_action_distro and obs:
-        distro_dict: dict = distro(obs).json()
-        print(distro_dict)
-
-        import matplotlib.pyplot as plt
-        import numpy as np
-        arr = np.asarray(list(distro_dict.values()))
-        x_range = np.arange(len(distro_dict))
-        plt.bar(x_range, arr)
-        plt.xticks(x_range, list(distro_dict.keys()))
-        st.pyplot(plt)
-
-
-def distro(observation):
-    return requests.post(f"{BASE_URL}/distribution", json=observation)
+    # compute_action_distro = st.checkbox(label="What's the variance of my actions?", value=False)
+    # if compute_action_distro and obs:
+    #     distro_dict: dict = distro(obs, auth, url).json()
+    #
+    #     import matplotlib.pyplot as plt
+    #     import numpy as np
+    #     arr = np.asarray(list(distro_dict.values()))
+    #     x_range = np.arange(len(distro_dict))
+    #     plt.bar(x_range, arr)
+    #     plt.xticks(x_range, list(distro_dict.keys()))
+    #     st.pyplot(plt)
 
 
-def predict(observation):
-    return requests.post(f"{BASE_URL}/predict", json=observation)
+def server_schema(auth, url):
+    return requests.get(f"{url}/schema", auth=auth)
+
+
+def distro(observation, auth, url):
+    return requests.post(f"{url}/distribution", json=observation, auth=auth)
+
+
+def predict(observation, auth, url):
+    return requests.post(f"{url}/predict", json=observation, auth=auth)
 
 
 def generate_frontend_from_observations(schema: dict):

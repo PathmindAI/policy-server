@@ -3,6 +3,7 @@ from ray import serve
 import shutil
 import itertools
 import json
+import yaml
 
 import config
 from api import Action, Observation
@@ -106,6 +107,14 @@ async def predict(payload: Observation, logged_in: bool = Depends(verify_credent
 async def clients(logged_in: bool = Depends(verify_credentials)):
     shutil.make_archive('clients', 'zip', './clients')
     return FileResponse(path='clients.zip', filename='clients.zip')
+
+
+@app.get("/schema", tags=["Clients"])
+async def server_schema(logged_in: bool = Depends(verify_credentials)):
+    with open(config.PATHMIND_SCHEMA, 'r') as schema_file:
+        schema_str = schema_file.read()
+    schema = yaml.safe_load(schema_str)
+    return schema
 
 
 @app.post("/predict_deterministic/", response_model=Action, tags=["Predictions"])
