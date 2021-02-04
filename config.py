@@ -28,6 +28,10 @@ LOCAL_SWAGGER = base_path("openapi.json")
 CLIENTS_ZIP = base_path("clients.zip")
 
 
+USER_NAME = "admin"
+PASSWORD = "admin"
+
+
 with open(PATHMIND_SCHEMA, "r") as f:
     schema: OrderedDict = yaml.safe_load(f.read())
 
@@ -39,39 +43,3 @@ action_type = int if parameters.get("discrete") else float
 payload_data = {k: (v.get("type"), ...) for k, v in observations.items()}
 
 
-# API Versioning
-API_PREFIX = "/api"
-API_VERSION = "0.1"
-
-# Web server configuration
-USE_SSL = False
-ADHOC_SSL = True
-USE_TORNADO = False
-DEBUG = os.environ.get("DEBUG", False)
-USE_DOCKER = os.environ.get("USE_DOCKER", False)
-HOST = "0.0.0.0" if USE_DOCKER else "localhost"
-if os.environ.get("HOST"):
-    HOST = os.environ.get("HOST")
-PORT = os.environ.get("PORT", 8000)
-
-
-def get_server_arguments():
-    """Get arguments for starting the web server with the
-    right configuration.
-
-    :return:
-    """
-    kwargs = {}
-    if USE_SSL:
-        if ADHOC_SSL:
-            context = "adhoc"
-        else:
-            # Note this assumes you created a cert/key pair in the `keys` folder.
-            context = ('keys/cert.pem', 'keys/key.pem')
-        kwargs['ssl_context'] = context
-    if USE_TORNADO:
-        kwargs['server'] = 'tornado'
-    kwargs['host'] = HOST
-    kwargs['port'] = PORT
-
-    return kwargs

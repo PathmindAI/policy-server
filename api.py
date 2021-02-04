@@ -91,7 +91,7 @@ def _predict_deterministic(payload: Observation):
             max_prob = probability
             max_action = response
         if max_prob > 1 - sum(actions.values()):
-            return max_action
+            return Action(actions=max_action, probability=max_prob)
 
 
 def _distribution(payload: Observation):
