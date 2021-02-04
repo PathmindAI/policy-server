@@ -74,6 +74,7 @@ models/
 saved_model.zip
 clients.zip
 schema.yaml
+openapi.json
 
 data/
 MODEL_FOLDER/
