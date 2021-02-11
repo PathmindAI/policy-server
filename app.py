@@ -6,7 +6,7 @@ import json
 import yaml
 
 import config
-from api import Action, Observation
+from api import Action, Observation, Experience
 from api import _predict_deterministic, _distribution, _predict
 from typing import List
 from utils import unzip
@@ -17,6 +17,14 @@ from fastapi.responses import FileResponse
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.openapi.utils import get_openapi
+
+from ray.rllib.evaluation.sample_batch_builder import SampleBatchBuilder
+from ray.rllib.offline.json_writer import JsonWriter
+from offline import EpisodeCache
+
+cache = EpisodeCache()
+batch_builder = SampleBatchBuilder()  # or MultiAgentSampleBatchBuilder
+writer = JsonWriter(config.EXPERIENCE_LOCATION)
 
 
 tags_metadata = [
@@ -96,11 +104,56 @@ async def predict(payload: Observation, logged_in: bool = Depends(verify_credent
 
         lists = [[getattr(payload, obs)] if not isinstance(getattr(payload, obs), List) else getattr(payload, obs)
                  for obs in config.observations.keys()]
-        merged = list(itertools.chain(*lists))
+        observations = list(itertools.chain(*lists))
         # Note that ray can't pickle the pydantic "Observation" model, so we need to convert it here.
-        return await SERVE_HANDLE.remote(merged)
+        return await SERVE_HANDLE.remote(observations)
     else:
         return _predict(payload)
+
+
+@app.post("/collect_experience/", response_model=Action, tags=["Predictions"])
+async def collect_experience(payload: Experience, logged_in: bool = Depends(verify_credentials)):
+
+    global cache
+    global batch_builder
+
+    observation = payload.observation
+    rew = payload.reward
+    done = payload.done
+
+    lists = [[getattr(observation, obs)] if not isinstance(getattr(observation, obs), List) else getattr(observation, obs)
+             for obs in config.observations.keys()]
+    obs = list(itertools.chain(*lists))
+    action = _predict(obs)
+
+    if cache.is_empty():
+        cache.store(t=0, prev_obs=obs, prev_action=action.actions, prev_reward=rew)
+
+    batch_builder.add_values(
+        agent_index=0,
+        actions=action.actions,
+        action_prob=action.probability,
+        t=cache.t,
+        eps_id=cache.episode,
+
+        prev_actions=cache.prev_action,
+        prev_rewards=cache.prev_reward,
+        obs=cache.prev_obs,
+
+        # sent from environment
+        new_obs=obs,
+        dones=done,
+        infos=None,
+        rewards=rew,
+    )
+    cache.store(t=cache.t+1, prev_obs=obs, prev_action=action.actions, prev_reward=rew)
+
+    if done:
+        print(">>> Writing offline batch")
+        writer.write(batch_builder.build_and_reset())
+        cache.reset()
+
+    return action
 
 
 @app.get("/clients", tags=["Clients"])
