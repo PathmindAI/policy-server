@@ -10,9 +10,14 @@ logger = sender.FluentSender('policy_server', host='0.0.0.0', port=24224)
 
 
 Observation = create_model(
-    'Payload',
+    'Observation',
     **config.payload_data
 )
+
+class Experience(BaseModel):
+    observation: Observation
+    reward: float
+    done: bool
 
 
 class Action(BaseModel):

@@ -78,3 +78,5 @@ openapi.json
 
 data/
 MODEL_FOLDER/
+
+offline_data/

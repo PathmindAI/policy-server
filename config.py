@@ -5,6 +5,8 @@ from collections import OrderedDict
 
 USE_RAY = True
 
+EXPERIENCE_LOCATION = "./offline_data/"
+
 
 def base_path(local_file):
     """Join a local file with the BASE_PATH.
