@@ -4,6 +4,7 @@ import shutil
 import itertools
 import json
 import yaml
+import numpy as np
 
 import config
 from api import Action, Observation, Experience
@@ -123,22 +124,31 @@ async def collect_experience(payload: Experience, logged_in: bool = Depends(veri
 
     lists = [[getattr(observation, obs)] if not isinstance(getattr(observation, obs), List) else getattr(observation, obs)
              for obs in config.observations.keys()]
+
     obs = list(itertools.chain(*lists))
+    obs = np.reshape(np.asarray(obs), (4,))
+
     action = _predict(obs)
+
+    # from client import prep
+    # print("The preprocessor is", prep)
 
     if cache.is_empty():
         cache.store(t=0, prev_obs=obs, prev_action=action.actions, prev_reward=rew)
 
+    act =action.actions[0]
+
     batch_builder.add_values(
         agent_index=0,
-        actions=action.actions,
+        actions=act,
         action_prob=action.probability,
+        action_logp=np.log(action.probability),
         t=cache.t,
         eps_id=cache.episode,
 
         prev_actions=cache.prev_action,
         prev_rewards=cache.prev_reward,
-        obs=cache.prev_obs,
+        obs=cache.prev_obs,  # prep.transform(...)
 
         # sent from environment
         new_obs=obs,
@@ -146,10 +156,9 @@ async def collect_experience(payload: Experience, logged_in: bool = Depends(veri
         infos=None,
         rewards=rew,
     )
-    cache.store(t=cache.t+1, prev_obs=obs, prev_action=action.actions, prev_reward=rew)
+    cache.store(t=cache.t+1, prev_obs=obs, prev_action=act, prev_reward=rew)
 
     if done:
-        print(">>> Writing offline batch")
         writer.write(batch_builder.build_and_reset())
         cache.reset()
 
