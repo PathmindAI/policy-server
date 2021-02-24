@@ -28,3 +28,4 @@ observations:
 parameters:
   discrete: True
   tuple: True
+  api_key: "1234567asdfgh"
