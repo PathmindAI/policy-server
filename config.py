@@ -39,9 +39,10 @@ with open(PATHMIND_SCHEMA, "r") as f:
 
 observations = schema.get("observations")
 parameters = schema.get("parameters")
-features = observations.keys()
 action_type = int if parameters.get("discrete") else float
 
-payload_data = {k: (v.get("type"), ...) for k, v in observations.items()}
+payload_data = {}
+if observations:
+    payload_data = {k: (v.get("type"), ...) for k, v in observations.items()}
 
 

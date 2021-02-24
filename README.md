@@ -74,22 +74,42 @@ observations:
 parameters:
   discrete: True
   tuple: False
+  api_key: "1234567asdfgh"
 ```
 
 In other words, you need to have `parameters` which tell the policy server whether we're dealing with `discrete`
-observations or `tuple`s. You also need to provide a schema for your `observations` according to what your
+observations or `tuple`s. Additionally, store the `api_key` in parameters for authentication.
+
+You also need to provide a schema for your `observations` according to what your
 model expects. Note that the ordering of the values is of importance, it is used by the policy server to concatenate
 the incoming values accordingly. The observation names should correspond to observation selection names in the
 web app and the `type`s are mandatory. Valid types correspond to basic numeric Python data types and `List`s
 thereof, namely the following:
-
 
 - `int`
 - `float`
 - `bool`
 - `List[int]`
 - `List[float]`
-- `List[bool]`
+
+### Running without specifying observations in schema.yaml
+
+If you don't specify the `observations` in the above `schema.yaml`, you can still run policy server, but with
+relatively limited functionality. The upside is that your `schema.yaml` is much easier to write, namely as follows:
+
+```yaml
+parameters:
+  discrete: True
+  tuple: False
+  api_key: "1234567asdfgh"
+```
+
+With this configuration of the policy server, the user will only have access to one predictive endpoint, namely
+`predict_raw/`, which requires users to send a JSON with the following structure `{"obs": []}` where the list elements
+have to have precisely the right cardinality and ordering. In other words, this endpoint strips all validation that
+the other endpoints have, but is quicker to set up due to not having to specify the structure of observations.
+
+### Starting the app
 
 Once you have both `saved_model.zip` and `schema.yaml` ready, you can start the policy server like this:
 

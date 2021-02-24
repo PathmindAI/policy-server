@@ -9,6 +9,11 @@ from fastapi import HTTPException
 logger = sender.FluentSender('policy_server', host='0.0.0.0', port=24224)
 
 
+RawObservation = create_model(
+    'RawObservation',
+    **{"obs": (List[float], ...)}
+)
+
 Observation = create_model(
     'Observation',
     **config.payload_data

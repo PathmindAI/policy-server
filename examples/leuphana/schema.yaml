@@ -1,6 +1,6 @@
 observations:
     RacerGreen:
-        type: float
+        type: bool
     RacerGray:
         type: float
     ExotGreen:
@@ -19,3 +19,4 @@ observations:
 parameters:
     discrete: True
     tuple: False
+    api_key: "1234567asdfgh"
