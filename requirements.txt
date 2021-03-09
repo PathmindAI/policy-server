@@ -13,3 +13,4 @@ aiofiles==0.6.0
 pydantic==1.7.3
 fluent-logger==0.9.4
 ray==1.1.0
+awscli==1.16.314
