@@ -1,9 +1,6 @@
 import streamlit as st
 import json
-import yaml
 import requests
-
-import config
 
 
 def run_the_app():
@@ -23,17 +20,16 @@ def run_the_app():
     st.markdown("# Pathmind Policy Server")
 
     schema = server_schema(auth, url).json()
+    print(schema)
 
-    st.markdown("## Prediction")
+    st.markdown("## Predictions")
 
     obs = generate_frontend_from_observations(schema)
     predict_button = st.button("Get prediction")
-    if obs and predict_button:
+    if obs and auth and predict_button:
         response = predict(obs, auth, url).json()
-        st.text(
-            f"Actions: {response.get('actions')}, \n"
-            f"Probability: {response.get('probability'):.2f} "
-        )
+        st.markdown(f"## Action: {response.get('actions')[0]}")
+        st.markdown(f"## Probability: {int(100 *response.get('probability'))}%")
 
     # compute_action_distro = st.checkbox(label="What's the variance of my actions?", value=False)
     # if compute_action_distro and obs:
@@ -57,7 +53,7 @@ def distro(observation, auth, url):
 
 
 def predict(observation, auth, url):
-    return requests.post(f"{url}/predict", json=observation, auth=auth)
+    return requests.post(f"{url}/predict/", json=observation, auth=auth)
 
 
 def generate_frontend_from_observations(schema: dict):
