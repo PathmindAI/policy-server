@@ -71,9 +71,9 @@ keys/
 clients/
 models/
 
-./saved_model.zip
+saved_model.zip
 clients.zip
-./schema.yaml
+schema.yaml
 openapi.json
 
 data/
