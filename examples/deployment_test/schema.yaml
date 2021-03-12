@@ -11,6 +11,7 @@ observations:
       type: float
 
 parameters:
-  discrete: True
-  tuple: False
+    discrete: True
+    tuple: False
+    api_key: "1234567asdfgh"
 

@@ -1,0 +1,15 @@
+# int, float, bool, str, List
+observations:
+    mouse_row:
+        type: float
+    mouse_col:
+        type: float
+    mouse_row_dist:
+        type: float
+    mouse_col_dist:
+        type: float
+
+parameters:
+    discrete: True
+    tuple: False
+    api_key: "1234567asdfgh"
