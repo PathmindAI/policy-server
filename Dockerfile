@@ -3,6 +3,9 @@ FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
 ARG S3BUCKET
 ARG S3MODELPATH
 ARG S3SCHEMAPATH
+ENV AWS_DEFAULT_REGION=us-east-1
+ARG AWS_SECRET_ACCESS_KEY
+ARG AWS_ACCESS_KEY_ID
 
 RUN mkdir -p /usr/src/app
 RUN mkdir -p /usr/src/app/models
