@@ -10,7 +10,6 @@ import config
 from api import Action, Observation, Experience, RawObservation
 from api import _predict_deterministic, _distribution, _predict
 from typing import List
-from utils import unzip
 from generate import CLI
 from offline import EpisodeCache
 from security import get_api_key
@@ -46,8 +45,6 @@ tags_metadata = [
 
 
 SERVE_HANDLE = None
-
-unzip(config.PATHMIND_POLICY)
 
 
 def custom_openapi():

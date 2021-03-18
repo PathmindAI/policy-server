@@ -24,7 +24,7 @@ PATHMIND_SCHEMA = base_path("schema.yaml")
 
 # Naming conventions are fixed, as we can control names on upload.
 MODEL_FOLDER = base_path("models")
-TF_MODEL_PATH = base_path("models/")
+TF_MODEL_PATH = base_path("models/saved_model/")
 SWAGGER_FILE = "http://localhost:8000/openapi.json"
 LOCAL_SWAGGER = base_path("openapi.json")
 CLIENTS_ZIP = base_path("clients.zip")
