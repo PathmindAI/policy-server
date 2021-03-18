@@ -1,3 +1,14 @@
+observations:
+    minute:
+      type: int
+    hour:
+      type: int
+    day:
+      type: int
+    month:
+      type: int
+    price:
+      type: float
 parameters:
   discrete: True
   tuple: False
