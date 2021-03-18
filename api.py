@@ -37,7 +37,7 @@ class PathmindPolicy:
         self.prev_reward_tensor = tf.constant([0], dtype=tf.float32)
         self.seq_lens_tensor = tf.constant([0], dtype=tf.int32)
 
-        self.load_policy = tf.saved_model.load("models/")
+        self.load_policy = tf.saved_model.load(config.TF_MODEL_PATH)
         self.model = self.load_policy.signatures.get("serving_default")
 
     def __call__(self, request):
