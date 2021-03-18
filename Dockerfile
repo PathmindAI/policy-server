@@ -1,11 +1,6 @@
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
 
-ARG S3BUCKET
-ARG S3MODELPATH
-ARG S3SCHEMAPATH
-ENV AWS_DEFAULT_REGION=us-east-1
-ARG AWS_SECRET_ACCESS_KEY
-ARG AWS_ACCESS_KEY_ID
+ARG MODEL_PATH
 
 RUN mkdir -p /usr/src/app
 RUN mkdir -p /usr/src/app/models
@@ -24,8 +19,8 @@ RUN pip3 install -r requirements.txt
 
 COPY . /usr/src/app
 
-RUN aws s3 cp s3://${S3BUCKET}/${S3SCHEMAPATH} ./ && \
-    aws s3 cp s3://${S3BUCKET}/${S3MODELPATH} ./ && \
+RUN cp ${MODEL_PATH}/schema.yaml ./ && \
+    cp ${MODEL_PATH}/saved_model.zip ./ && \
     python generate.py unzip
 
 CMD ["uvicorn", "app:app",  "--host", "0.0.0.0"]
