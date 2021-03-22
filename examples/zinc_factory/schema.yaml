@@ -9,7 +9,6 @@ observations:
       type: int
     price:
       type: float
-
 parameters:
   discrete: True
   tuple: False
