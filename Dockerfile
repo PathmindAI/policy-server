@@ -24,8 +24,8 @@ RUN pip3 install -r requirements.txt
 
 COPY . /usr/src/app
 
-RUN aws s3 cp s3://${S3BUCKET}/${S3SCHEMAPATH} ./ && \
-    aws s3 cp s3://${S3BUCKET}/${S3MODELPATH} ./ && \
+RUN aws s3 cp s3://${S3BUCKET}/${S3SCHEMAPATH} ./schema.yaml && \
+    aws s3 cp s3://${S3BUCKET}/${S3MODELPATH} ./saved_model.zip && \
     python generate.py unzip
 
 CMD ["uvicorn", "app:app",  "--host", "0.0.0.0"]
