@@ -59,6 +59,9 @@ ingress:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+        proxy_pass_request_headers  on;
+        proxy_set_header access_token $http_access_token;
   hosts:
     - host: ""
       paths: [/]
