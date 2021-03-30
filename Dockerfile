@@ -1,12 +1,5 @@
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
 
-ARG S3BUCKET
-ARG S3MODELPATH
-ARG S3SCHEMAPATH
-ENV AWS_DEFAULT_REGION=us-east-1
-ARG AWS_SECRET_ACCESS_KEY
-ARG AWS_ACCESS_KEY_ID
-
 RUN mkdir -p /usr/src/app
 RUN mkdir -p /usr/src/app/models
 
@@ -23,6 +16,13 @@ RUN chmod +x /bin/swagger-codegen
 RUN pip3 install -r requirements.txt
 
 COPY . /usr/src/app
+
+ARG S3BUCKET
+ARG S3MODELPATH
+ARG S3SCHEMAPATH
+ENV AWS_DEFAULT_REGION=us-east-1
+ARG AWS_SECRET_ACCESS_KEY
+ARG AWS_ACCESS_KEY_ID
 
 RUN aws s3 cp s3://${S3BUCKET}/${S3SCHEMAPATH} ./schema.yaml && \
     aws s3 cp s3://${S3BUCKET}/${S3MODELPATH} ./saved_model.zip && \
