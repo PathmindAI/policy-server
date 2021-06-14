@@ -54,7 +54,7 @@ following [these instructions](https://swagger.io/docs/open-source-tools/swagger
 
 ## Run locally
 
-To run the application, put a TensorFlow SavedModel file called `saved_model.zip` next to `app.py`. In
+To run the application, put a TensorFlow SavedModel file called `saved_model.zip` next to `app.py`. Unzip the saved_model.zip in to `./models'.  In
 the same location you need to provide a `schema.yaml` file, which schematically looks as follows:
 
 ```yaml
