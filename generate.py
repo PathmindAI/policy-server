@@ -44,7 +44,7 @@ class CLI:
 
 def generate_client_for(lang):
     os.makedirs(f"./clients/{lang}")
-    subprocess.run(["swagger-codegen", "generate", "-i", config.LOCAL_SWAGGER, "-l", lang, "-o", f"clients/{lang}"])
+    subprocess.run(["./swagger-codegen", "generate", "-i", config.LOCAL_SWAGGER, "-l", lang, "-o", f"clients/{lang}"])
 
 
 if __name__ == '__main__':
