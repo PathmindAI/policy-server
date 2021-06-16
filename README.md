@@ -51,11 +51,13 @@ pip install -r requirements.txt
 Also, make sure you have `swagger-codegen` installed on your system, 
 following [these instructions](https://swagger.io/docs/open-source-tools/swagger-codegen/).
 
+Check the Dockerfile and generate.py for details on how `swagger-codegen` is called from the code.
+
 
 ## Run locally
 
-To run the application, put a TensorFlow SavedModel file called `saved_model.zip` next to `app.py`. In
-the same location you need to provide a `schema.yaml` file, which schematically looks as follows:
+To run the application, put a TensorFlow SavedModel file called `saved_model.zip` next to `app.py`. Unzip the saved_model.zip in to `./models'.  In
+the same location (next to app.py)  you need to provide a `schema.yaml` file, which schematically looks as follows:
 
 ```yaml
 observations:
