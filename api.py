@@ -40,8 +40,9 @@ class PathmindPolicy:
         self.load_policy = tf.saved_model.load(config.TF_MODEL_PATH)
         self.model = self.load_policy.signatures.get("serving_default")
 
-    def __call__(self, request):
-        array = np.asarray(request.data)
+    async def __call__(self, request):
+        array = np.asarray(await request.body()) # Updated for Ray 1.3.0
+        
         op = np.reshape(array, (1, array.size))
         tensors = tf.convert_to_tensor(op, dtype=tf.float32, name='observations')
 
