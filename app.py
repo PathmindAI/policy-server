@@ -26,7 +26,9 @@ cache = EpisodeCache()
 batch_builder = SampleBatchBuilder()  # or MultiAgentSampleBatchBuilder
 writer = JsonWriter(config.EXPERIENCE_LOCATION)
 
-app = FastAPI()
+url_path = config.parameters.get("url_path")
+
+app = FastAPI(openapi_url=url_path) if url_path else FastAPI()
 
 tags_metadata = [
     {
