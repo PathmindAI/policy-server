@@ -1,0 +1,15 @@
+parameters:
+  discrete: false
+  tuple: false
+  api_key: 1234567asdfgh
+observations:
+  callCenters:
+    type: List[float]
+  hour:
+    type: float
+  currentCall:
+    type: List[float]
+  links:
+    type: List[float]
+  minute:
+    type: float
