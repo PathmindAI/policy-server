@@ -1,3 +1,4 @@
+import ipdb
 import tensorflow as tf
 import numpy as np
 from typing import List
@@ -36,6 +37,7 @@ class PathmindPolicy:
         self.prev_action_tensor = tf.constant([0], dtype=tf.int64)
         self.prev_reward_tensor = tf.constant([0], dtype=tf.float32)
         self.seq_lens_tensor = tf.constant([0], dtype=tf.int32)
+        self.timestep = tf.constant([0], dtype=tf.int64)
 
         self.load_policy = tf.saved_model.load(config.TF_MODEL_PATH)
         self.model = self.load_policy.signatures.get("serving_default")
@@ -46,9 +48,10 @@ class PathmindPolicy:
         op = np.reshape(array, (1, array.size))
         tensors = tf.convert_to_tensor(op, dtype=tf.float32, name='observations')
 
+        ipdb.set_trace(context=20)
         result = self.model(
             is_training=self.is_training_tensor, observations=tensors, prev_action=self.prev_action_tensor,
-            prev_reward=self.prev_reward_tensor, seq_lens=self.seq_lens_tensor
+            prev_reward=self.prev_reward_tensor, seq_lens=self.seq_lens_tensor, timestep=self.timestep
         )
 
         action_keys = [k for k in result.keys() if "actions" in k]
@@ -65,7 +68,7 @@ class PathmindPolicy:
             actions = [config.action_type(x) for x in numpy_tensors]
 
         global logger
-        logger.emit('predict', {'observation': request.data, 'action': actions, 'probability': probability})
+        logger.emit('predict', {'observation': await request.body(), 'action': actions, 'probability': probability})
 
         return Action(actions=actions, probability=probability)
 
