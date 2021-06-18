@@ -40,8 +40,8 @@ class PathmindPolicy:
         self.load_policy = tf.saved_model.load(config.TF_MODEL_PATH)
         self.model = self.load_policy.signatures.get("serving_default")
 
-    def __call__(self, request):
-        array = np.asarray(request.data)
+    async def __call__(self, request):
+        array = np.asarray(await request.body())
         op = np.reshape(array, (1, array.size))
         tensors = tf.convert_to_tensor(op, dtype=tf.float32, name='observations')
 
@@ -64,7 +64,7 @@ class PathmindPolicy:
             actions = [config.action_type(x) for x in numpy_tensors]
 
         global logger
-        logger.emit('predict', {'observation': request.data, 'action': actions, 'probability': probability})
+        logger.emit('predict', {'observation': await request.body(), 'action': actions, 'probability': probability})
 
         return Action(actions=actions, probability=probability)
 
