@@ -48,14 +48,14 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: 8000
+              port: 9999
             initialDelaySeconds: 60
             periodSeconds: 10
             failureThreshold: 10
           readinessProbe:
             httpGet:
               path: /
-              port: 8000
+              port: 9999
             initialDelaySeconds: 30
             periodSeconds: 10
             failureThreshold: 10
