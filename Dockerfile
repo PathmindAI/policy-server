@@ -10,6 +10,7 @@ RUN apt update -y && \
     wget https://oss.sonatype.org/content/repositories/releases/io/swagger/swagger-codegen-cli/2.2.1/swagger-codegen-cli-2.2.1.jar
 
 COPY requirements.txt /usr/src/app/
+COPY swagger-codegen /usr/src/app/
 
 RUN chmod +x swagger-codegen
 RUN cp swagger-codegen-cli-2.2.1.jar swagger-codegen-cli.jar
