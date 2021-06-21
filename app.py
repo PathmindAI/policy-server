@@ -72,7 +72,7 @@ if config.USE_RAY:
         ray.init(_metrics_export_port=8080)  # Initialize new ray instance
         client = serve.start(http_host=None)
 
-        backend_config = serve.BackendConfig(num_replicas=4)
+        backend_config = serve.BackendConfig() #(num_replicas=4)
 
         from api import PathmindPolicy
         client.create_backend("pathmind_policy", PathmindPolicy, config=backend_config)
