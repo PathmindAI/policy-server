@@ -69,7 +69,7 @@ if config.USE_RAY:
     @app.on_event("startup")
     async def startup_event():
 
-        ray.init(_metrics_export_port=8080)  # Initialize new ray instance
+        ray.init(num_cpus=4, _metrics_export_port=8080)  # Initialize new ray instance
         client = serve.start(http_host=None)
 
         backend_config = serve.BackendConfig() #(num_replicas=4)
