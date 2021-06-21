@@ -10,9 +10,9 @@ RUN apt update -y && \
     wget https://oss.sonatype.org/content/repositories/releases/io/swagger/swagger-codegen-cli/2.2.1/swagger-codegen-cli-2.2.1.jar
 
 COPY requirements.txt /usr/src/app/
-COPY swagger-codegen /bin/
 
-RUN chmod +x /bin/swagger-codegen
+RUN chmod +x swagger-codegen
+RUN cp swagger-codegen-cli-2.2.1.jar swagger-codegen-cli.jar
 RUN pip3 install -r requirements.txt
 
 COPY . /usr/src/app
