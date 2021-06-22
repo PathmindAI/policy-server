@@ -1,10 +1,13 @@
-import tensorflow as tf
+from ray.rllib.utils.framework import try_import_tf
 import numpy as np
 from typing import List
 from pydantic import BaseModel, create_model
 import config
 from fluent import sender
 from fastapi import HTTPException
+
+tf1, tf, tfv = try_import_tf()
+tf1.enable_eager_execution()
 
 logger = sender.FluentSender('policy_server', host='0.0.0.0', port=24224)
 
@@ -34,6 +37,7 @@ class PathmindPolicy:
     def __init__(self):
         self.is_training_tensor = tf.constant(False, dtype=tf.bool)
         self.prev_action_tensor = tf.constant([0], dtype=tf.int64)
+        self.timestep = tf1.placeholder_with_default( tf.zeros((), dtype=tf.int64), (), name="timestep")
         self.prev_reward_tensor = tf.constant([0], dtype=tf.float32)
         self.seq_lens_tensor = tf.constant([0], dtype=tf.int32)
 
@@ -47,11 +51,10 @@ class PathmindPolicy:
 
         result = self.model(
             is_training=self.is_training_tensor, observations=tensors, prev_action=self.prev_action_tensor,
-            prev_reward=self.prev_reward_tensor, seq_lens=self.seq_lens_tensor
+            prev_reward=self.prev_reward_tensor, seq_lens=self.seq_lens_tensor, timestep=self.timestep
         )
 
         action_keys = [k for k in result.keys() if "actions" in k]
-
         action_prob_tensor = result.get("action_prob").numpy()
         probability = float(action_prob_tensor[0])
 
