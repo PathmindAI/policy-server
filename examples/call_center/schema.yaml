@@ -1,6 +1,6 @@
 parameters:
-  discrete: false
-  tuple: false
+  discrete: true
+  tuple: true 
   api_key: 1234567asdfgh
 observations:
   callCenters:
