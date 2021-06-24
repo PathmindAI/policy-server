@@ -177,3 +177,14 @@ data source into Grafana.
 ```commandline
 prometheus --config.file=./prometheus.yml
 ```
+
+## Testing Proxy behavior locally with Traefik
+This is what I use for testing proxy behavior, but locally.
+
+Set the `url_path` in your schema.yaml to be `app/v1` (this matches what traefik will use from routes.toml)
+
+run
+`./traefik --configFile=traefik.toml`
+
+and then separately start the app as usual:
+`uvicorn app:app`
