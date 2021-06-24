@@ -9,7 +9,7 @@ from starlette.status import HTTP_403_FORBIDDEN
 # API_KEY = "1234567asdfgh"
 
 API_KEY = config.parameters.get("api_key")
-API_KEY_NAME = "access_token"
+API_KEY_NAME = "access-token"
 
 api_key_query = APIKeyQuery(name=API_KEY_NAME, auto_error=False)
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
@@ -20,9 +20,9 @@ basic_auth = HTTPBasic()
 
 
 async def get_api_key(
-        api_key_query: str = Security(api_key_query),
-        api_key_header: str = Security(api_key_header),
-        api_key_cookie: str = Security(api_key_cookie),
+    api_key_query: str = Security(api_key_query),
+    api_key_header: str = Security(api_key_header),
+    api_key_cookie: str = Security(api_key_cookie),
 ):
     if api_key_query == API_KEY:
         return api_key_query
