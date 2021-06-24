@@ -18,6 +18,7 @@ from fastapi.responses import FileResponse
 from fastapi import Depends, FastAPI, HTTPException, status, Security
 from fastapi.security.api_key import APIKeyQuery, APIKeyCookie, APIKeyHeader, APIKey
 from fastapi.openapi.utils import get_openapi
+from fastapi.routing import APIRouter
 
 from ray.rllib.evaluation.sample_batch_builder import SampleBatchBuilder
 from ray.rllib.offline.json_writer import JsonWriter
@@ -28,7 +29,10 @@ writer = JsonWriter(config.EXPERIENCE_LOCATION)
 
 url_path = config.parameters.get("url_path")
 
-app = FastAPI(openapi_prefix=f"/{url_path}") if url_path else FastAPI()
+app = FastAPI(root_path=f"/{url_path}") if url_path else FastAPI()
+health_router = APIRouter()
+
+app.include_router(health_router)
 
 tags_metadata = [
     {
@@ -175,7 +179,7 @@ async def server_schema(api_key: APIKey = Depends(get_api_key)):
     return schema
 
 
-@app.get("/", tags=["Health"])
+@heath_router.get("/", tags=["Health"])
 async def health_check():
     return "ok"
 
