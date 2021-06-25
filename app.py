@@ -28,7 +28,7 @@ writer = JsonWriter(config.EXPERIENCE_LOCATION)
 
 url_path = config.parameters.get("url_path")
 
-app = FastAPI(openapi_prefix=f"/{url_path}") if url_path else FastAPI()
+app = FastAPI(root_path=f"/{url_path}") if url_path else FastAPI()
 
 tags_metadata = [
     {
@@ -61,6 +61,8 @@ def custom_openapi():
     openapi_schema["info"]["x-logo"] = {
         "url": "https://i2.wp.com/pathmind.com/wp-content/uploads/2020/07/pathmind-logo-blue.png?w=1176&ssl=1"
     }
+    if url_path:
+        openapi_schema["servers"] = [{ "url": f"/{url_path}"}]
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 
