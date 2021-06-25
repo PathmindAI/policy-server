@@ -61,6 +61,8 @@ def custom_openapi():
     openapi_schema["info"]["x-logo"] = {
         "url": "https://i2.wp.com/pathmind.com/wp-content/uploads/2020/07/pathmind-logo-blue.png?w=1176&ssl=1"
     }
+    if url_path:
+        openapi_schema["servers"] = [{ "url": f"/{url_path}"}]
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 
