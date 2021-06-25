@@ -2,6 +2,7 @@
 import os
 import oyaml as yaml
 from collections import OrderedDict
+from pydantic import Field
 
 USE_RAY = True
 
@@ -17,7 +18,7 @@ def base_path(local_file):
 
 
 # If you put BASE_PATH on your PATH we use that, otherwise the current working directory.
-BASE_PATH = os.environ.get('BASE_PATH', os.path.expanduser("."))
+BASE_PATH = os.environ.get("BASE_PATH", os.path.expanduser("."))
 
 PATHMIND_POLICY = base_path("saved_model.zip")
 PATHMIND_SCHEMA = base_path("schema.yaml")
@@ -42,7 +43,14 @@ parameters = schema.get("parameters")
 action_type = int if parameters.get("discrete") else float
 
 payload_data = {}
+# If the schema includes `max_items` set the constraints for the array
 if observations:
-    payload_data = {k: (v.get("type"), ...) for k, v in observations.items()}
-
-
+    payload_data = {
+        k: (
+            v.get("type"),
+            Field(..., max_items=v.get("max_items"), min_items=v.get("min_items"))
+            if v.get("max_items")
+            else ...,
+        )
+        for k, v in observations.items()
+    }
