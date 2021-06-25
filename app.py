@@ -28,7 +28,7 @@ writer = JsonWriter(config.EXPERIENCE_LOCATION)
 
 url_path = config.parameters.get("url_path")
 
-app = FastAPI(openapi_prefix=f"/{url_path}") if url_path else FastAPI()
+app = FastAPI(root_path=f"/{url_path}") if url_path else FastAPI()
 
 tags_metadata = [
     {
