@@ -94,6 +94,14 @@ thereof, namely the following:
 - `List[int]`
 - `List[float]`
 
+For `List` you can also include the expected list length with:
+```
+call_centers:
+  type: List[float]
+  max_items: 5
+  min_items: 5
+```
+
 ### Running without specifying observations in schema.yaml
 
 If you don't specify the `observations` in the above `schema.yaml`, you can still run policy server, but with
