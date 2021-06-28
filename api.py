@@ -9,18 +9,13 @@ from fastapi import HTTPException
 tf1, tf, tfv = try_import_tf()
 tf1.enable_eager_execution()
 
-logger = sender.FluentSender('policy_server', host='0.0.0.0', port=24224)
+logger = sender.FluentSender("policy_server", host="0.0.0.0", port=24224)
 
 
-RawObservation = create_model(
-    'RawObservation',
-    **{"obs": (List[float], ...)}
-)
+RawObservation = create_model("RawObservation", **{"obs": (List[float], ...)})
 
-Observation = create_model(
-    'Observation',
-    **config.payload_data
-)
+Observation = create_model("Observation", **config.payload_data)
+
 
 class Experience(BaseModel):
     observation: Observation
@@ -37,7 +32,9 @@ class PathmindPolicy:
     def __init__(self):
         self.is_training_tensor = tf.constant(False, dtype=tf.bool)
         self.prev_action_tensor = tf.constant([0], dtype=tf.int64)
-        self.timestep = tf1.placeholder_with_default( tf.zeros((), dtype=tf.int64), (), name="timestep")
+        self.timestep = tf1.placeholder_with_default(
+            tf.zeros((), dtype=tf.int64), (), name="timestep"
+        )
         self.prev_reward_tensor = tf.constant([0], dtype=tf.float32)
 
         self.load_policy = tf.saved_model.load(config.TF_MODEL_PATH)
@@ -69,7 +66,14 @@ class PathmindPolicy:
             actions = [config.action_type(x) for x in numpy_tensors]
 
         global logger
-        logger.emit('predict', {'observation': await request.body(), 'action': actions, 'probability': probability})
+        logger.emit(
+            "predict",
+            {
+                "observation": await request.body(),
+                "action": actions,
+                "probability": probability,
+            },
+        )
 
         return Action(actions=actions, probability=probability)
 
@@ -80,6 +84,7 @@ pm = PathmindPolicy()
 def _predict(payload: Observation):
     class Dummy:
         data = None
+
     dummy = Dummy()
     dummy.data = payload
     return pm(dummy)
@@ -90,9 +95,13 @@ def _predict_deterministic(payload: Observation):
     to restore the agent. Not in itself a problem, just less convenient compared
     to what we have now (don't need big JARs hanging around)."""
     if not config.parameters.get("discrete"):
-        raise HTTPException(status_code=405, detail="Endpoint only available for discrete actions")
+        raise HTTPException(
+            status_code=405, detail="Endpoint only available for discrete actions"
+        )
     if config.parameters.get("tuple"):
-        raise HTTPException(status_code=405, detail="Endpoint only available for non-tuple scenarios")
+        raise HTTPException(
+            status_code=405, detail="Endpoint only available for non-tuple scenarios"
+        )
 
     max_action = None
     max_prob = 0.0
@@ -111,9 +120,13 @@ def _predict_deterministic(payload: Observation):
 
 def _distribution(payload: Observation):
     if not config.parameters.get("discrete"):
-        raise HTTPException(status_code=405, detail="Endpoint only available for discrete actions")
+        raise HTTPException(
+            status_code=405, detail="Endpoint only available for discrete actions"
+        )
     if config.parameters.get("tuple"):
-        raise HTTPException(status_code=405, detail="Endpoint only available for non-tuple scenarios")
+        raise HTTPException(
+            status_code=405, detail="Endpoint only available for non-tuple scenarios"
+        )
     distro_dict = {}
     found_all_actions = False
     trials = 0
