@@ -1,22 +1,22 @@
 observations:
-    RacerGreen:
-        type: bool
-    RacerGray:
-        type: float
-    ExotGreen:
-        type: float
-    OrdersRacerGreen:
-        type: float
-    OrdersRacerGray:
-        type: float
-    StockT2:
-        type: float
-    OrdersExotGreen:
-        type: float
-    selectedProduct:
-        type: float
+  RacerGreen:
+    type: bool
+  RacerGray:
+    type: float
+  ExotGreen:
+    type: float
+  OrdersRacerGreen:
+    type: float
+  OrdersRacerGray:
+    type: float
+  StockT2:
+    type: float
+  OrdersExotGreen:
+    type: float
+  selectedProduct:
+    type: float
 
 parameters:
-    discrete: True
-    tuple: False
-    api_key: "1234567asdfgh"
+  discrete: True
+  tuple: False
+  api_key: "1234567asdfgh"

@@ -1,10 +1,11 @@
-import config
 import secrets
-from fastapi import Depends, FastAPI, HTTPException, status, Security
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from fastapi.security.api_key import APIKeyQuery, APIKeyCookie, APIKeyHeader, APIKey
 
+from fastapi import Depends, HTTPException, Security, status
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.security.api_key import APIKeyCookie, APIKeyHeader, APIKeyQuery
 from starlette.status import HTTP_403_FORBIDDEN
+
+import config
 
 # API_KEY = "1234567asdfgh"
 
