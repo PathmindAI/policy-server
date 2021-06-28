@@ -64,6 +64,7 @@ ingress:
         proxy_set_header access-token $http_access_token;
     nginx.ingress.kubernetes.io/cors-allow-origin: "https://staging.devpathmind.com"
     nginx.ingress.kubernetes.io/cors-allow-methods: "*"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
   hosts:
     - host: ""
       paths: [/]
