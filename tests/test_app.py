@@ -17,8 +17,10 @@ def test_health_check():
 payload = {
     "mouse_row": 1,
     "mouse_col": 1,
-    "mouse_row_dist": 1,
-    "mouse_col_dist": 1,
+    "mouse_row_distance": 1,
+    "mouse_col_distance": 1,
+    "cheese_row": 1,
+    "cheese_col": 1,
 }
 
 
