@@ -46,11 +46,15 @@ class PathmindPolicy:
     async def __call__(self, request):
         array = np.asarray(await request.body())
         op = np.reshape(array, (1, array.size))
-        tensors = tf.convert_to_tensor(op, dtype=tf.float32, name='observations')
+        tensors = tf.convert_to_tensor(op, dtype=tf.float32, name="observations")
 
         result = self.model(
-            is_training=self.is_training_tensor, observations=tensors, prev_action=self.prev_action_tensor,
-            prev_reward=self.prev_reward_tensor, seq_lens=self.seq_lens_tensor, timestep=self.timestep
+            is_training=self.is_training_tensor,
+            observations=tensors,
+            prev_action=self.prev_action_tensor,
+            prev_reward=self.prev_reward_tensor,
+            seq_lens=self.seq_lens_tensor,
+            timestep=self.timestep,
         )
 
         action_keys = [k for k in result.keys() if "actions" in k]
