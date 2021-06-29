@@ -1,7 +1,7 @@
+wheel
 tensorflow==2.3.1
 fire==0.3.1
 fastapi==0.65.2
-wheel
 uvicorn==0.14.0
 oyaml~=1.0
 fluent-logger==0.9.4
