@@ -1,26 +1,32 @@
-import ray
-from ray import serve
-import shutil
 import itertools
 import json
-import yaml
+import shutil
+from typing import List
+
 import numpy as np
+import ray
+import yaml
+from fastapi import Depends, FastAPI
+from fastapi.openapi.utils import get_openapi
+from fastapi.responses import FileResponse
+from fastapi.security.api_key import APIKey
+from ray import serve
+from ray.rllib.evaluation.sample_batch_builder import SampleBatchBuilder
+from ray.rllib.offline.json_writer import JsonWriter
 
 import config
-from api import Action, Observation, Experience, RawObservation
-from api import _predict_deterministic, _distribution, _predict
-from typing import List
+from api import (
+    Action,
+    Experience,
+    Observation,
+    RawObservation,
+    _distribution,
+    _predict,
+    _predict_deterministic,
+)
 from generate import CLI
 from offline import EpisodeCache
 from security import get_api_key
-
-from fastapi.responses import FileResponse
-from fastapi import Depends, FastAPI, HTTPException, status, Security
-from fastapi.security.api_key import APIKeyQuery, APIKeyCookie, APIKeyHeader, APIKey
-from fastapi.openapi.utils import get_openapi
-
-from ray.rllib.evaluation.sample_batch_builder import SampleBatchBuilder
-from ray.rllib.offline.json_writer import JsonWriter
 
 cache = EpisodeCache()
 batch_builder = SampleBatchBuilder()  # or MultiAgentSampleBatchBuilder

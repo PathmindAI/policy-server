@@ -1,6 +1,7 @@
-import streamlit as st
 import json
+
 import requests
+import streamlit as st
 
 
 def run_the_app():
@@ -81,7 +82,9 @@ def generate_frontend_from_observations(schema: dict):
             validate_list_items(values, val)
             check_min_max_items(values, val)
         else:
-            raise Exception(f"Unsupported data type {prop_type} in YAML schema for model server.")
+            raise Exception(
+                f"Unsupported data type {prop_type} in YAML schema for model server."
+            )
         result[key] = val
     return result
 
@@ -91,21 +94,31 @@ def validate_list_items(values, val):
     if items_type == "integer":
         assert all(isinstance(v, int) for v in val), "All list items must be integers."
     elif items_type == "number":
-        assert all(isinstance(v, float) for v in val), "All list items must be floating point numbers."
+        assert all(
+            isinstance(v, float) for v in val
+        ), "All list items must be floating point numbers."
 
 
 def check_min_max_items(values, val):
     if "minItems" in values.keys():
-        assert len(val) >= values.get("minItems"), f"Array too small, expected at least {values.get('minItems')} items."
+        assert len(val) >= values.get(
+            "minItems"
+        ), f"Array too small, expected at least {values.get('minItems')} items."
     if "maxItems" in values.keys():
-        assert len(val) <= values.get("maxItems"), f"Array too large, expected at most {values.get('maxItems')} items."
+        assert len(val) <= values.get(
+            "maxItems"
+        ), f"Array too large, expected at most {values.get('maxItems')} items."
 
 
 def check_min_max(values, val):
     if "minimum" in values.keys():
-        assert val >= values.get("minimum"), f"value {val} too small, expected a minimum of {values.get('minimum')}."
+        assert val >= values.get(
+            "minimum"
+        ), f"value {val} too small, expected a minimum of {values.get('minimum')}."
     if "maximum" in values.keys():
-        assert val <= values.get("maximum"),  f"value {val} too large, expected a maximum of {values.get('maximum')}."
+        assert val <= values.get(
+            "maximum"
+        ), f"value {val} too large, expected a maximum of {values.get('maximum')}."
 
 
 if __name__ == "__main__":

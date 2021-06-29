@@ -1,17 +1,16 @@
 observations:
-    minute:
-      type: int
-    hour:
-      type: int
-    day:
-      type: int
-    month:
-      type: int
-    price:
-      type: float
+  minute:
+    type: int
+  hour:
+    type: int
+  day:
+    type: int
+  month:
+    type: int
+  price:
+    type: float
 
 parameters:
-    discrete: True
-    tuple: False
-    api_key: "1234567asdfgh"
-
+  discrete: True
+  tuple: False
+  api_key: "1234567asdfgh"

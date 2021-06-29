@@ -1,7 +1,8 @@
 """Basic configuration for the application."""
 import os
-import oyaml as yaml
 from collections import OrderedDict
+
+import oyaml as yaml
 from pydantic import Field
 
 USE_RAY = True

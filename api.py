@@ -1,10 +1,12 @@
-from ray.rllib.utils.framework import try_import_tf
-import numpy as np
 from typing import List
-from pydantic import BaseModel, create_model
-import config
-from fluent import sender
+
+import numpy as np
 from fastapi import HTTPException
+from fluent import sender
+from pydantic import BaseModel, create_model
+from ray.rllib.utils.framework import try_import_tf
+
+import config
 
 tf1, tf, tfv = try_import_tf()
 tf1.enable_eager_execution()

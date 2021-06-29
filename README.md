@@ -6,7 +6,6 @@ Pathmind's policy serving solution. It leverages a open source technologies
 to quickly specify and run a lean web applications that serves one or several
 reinforcement learning policies.
 
-
 ## How does it work?
 
 ![architecture](assets/server_backend_v2.jpg)
@@ -21,8 +20,7 @@ This will start a uvicorn server for `FastAPI` which is internally dispatched to
 handle for predictions.
 
 We leverage Swagger UI to fully describe, validate and test this API. The following endpoints
-are exposed on port `8000` (unless stated otherwise): 
-
+are exposed on port `8000` (unless stated otherwise):
 
 - `/predict` To receive model predictions (once the first three endpoints have been used).
 - `/clients` To download SDKs in several languages (currently Python, Java, Scala, R).
@@ -48,16 +46,14 @@ virtualenv venv && source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Also, make sure you have `swagger-codegen` installed on your system, 
+Also, make sure you have `swagger-codegen` installed on your system,
 following [these instructions](https://swagger.io/docs/open-source-tools/swagger-codegen/).
 
 Check the Dockerfile and generate.py for details on how `swagger-codegen` is called from the code.
 
-
 ## Run locally
 
-To run the application, put a TensorFlow SavedModel file called `saved_model.zip` next to `app.py`. Unzip the saved_model.zip in to `./models'.  In
-the same location (next to app.py)  you need to provide a `schema.yaml` file, which schematically looks as follows:
+To run the application, put a TensorFlow SavedModel file called `saved_model.zip` next to `app.py`. Unzip the saved_model.zip in to `./models'. In the same location (next to app.py) you need to provide a `schema.yaml` file, which schematically looks as follows:
 
 ```yaml
 observations:
@@ -71,7 +67,6 @@ observations:
     type: bool
   is_up_free:
     type: bool
-
 
 parameters:
   discrete: True
@@ -95,6 +90,7 @@ thereof, namely the following:
 - `List[float]`
 
 For `List` you can also include the expected list length with:
+
 ```
 call_centers:
   type: List[float]
@@ -146,9 +142,8 @@ streamlit run frontend.py
 will start the app on [localhost:8501](localhost:8501) for testing. The application
 should be self-explanatory. It leverages the `lpoc` example from the `examples` folder,
 but can be used with any other model. Once you hit the `Start the server from schema`
-button in the UI, you can also access the backend service directly at 
+button in the UI, you can also access the backend service directly at
 [localhost:8080](localhost:8000).
-
 
 ## Docker
 
@@ -156,7 +151,7 @@ Build the image with
 
 ```bash
  docker build . -t policy_server
- ```
+```
 
 then run the container with
 
@@ -187,6 +182,7 @@ prometheus --config.file=./prometheus.yml
 ```
 
 ## Testing Proxy behavior locally with Traefik
+
 This is what I use for testing proxy behavior, but locally.
 
 Set the `url_path` in your schema.yaml to be `app/v1` (this matches what traefik will use from routes.toml)
