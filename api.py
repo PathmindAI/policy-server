@@ -38,6 +38,7 @@ class PathmindPolicy:
             tf.zeros((), dtype=tf.int64), (), name="timestep"
         )
         self.prev_reward_tensor = tf.constant([0], dtype=tf.float32)
+        self.seq_lens_tensor = tf.constant([0], dtype=tf.int32)
 
         self.load_policy = tf.saved_model.load(config.TF_MODEL_PATH)
         self.model = self.load_policy.signatures.get("serving_default")
@@ -52,6 +53,7 @@ class PathmindPolicy:
             observations=tensors,
             prev_action=self.prev_action_tensor,
             prev_reward=self.prev_reward_tensor,
+            seq_lens=self.seq_lens_tensor,
             timestep=self.timestep,
         )
 
