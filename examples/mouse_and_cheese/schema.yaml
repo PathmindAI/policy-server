@@ -4,9 +4,13 @@ observations:
     type: float
   mouse_col:
     type: float
-  mouse_row_dist:
+  mouse_row_distance:
     type: float
-  mouse_col_dist:
+  mouse_col_distance:
+    type: float
+  cheese_row:
+    type: float
+  cheese_col:
     type: float
 
 parameters:

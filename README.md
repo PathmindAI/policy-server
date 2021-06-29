@@ -44,6 +44,8 @@ Lastly, we also auto-generate a CLI from `generate.py` using Google's `fire` lib
 ```bash
 virtualenv venv && source venv/bin/activate
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
+pre-commit install
 ```
 
 Also, make sure you have `swagger-codegen` installed on your system,
