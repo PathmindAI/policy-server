@@ -68,12 +68,12 @@ ingress:
     nginx.ingress.kubernetes.io/cors-allow-methods: "*"
     nginx.ingress.kubernetes.io/enable-cors: "true"
   hosts:
-    - host: ""
+    - host: "api.pathmind.com"
       paths: [/]
   tls:
     - secretName: letsencrypt-dev
       hosts:
-        - ""
+        - "api.pathmind.com"
 
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
