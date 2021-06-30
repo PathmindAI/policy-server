@@ -28,10 +28,12 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name:
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -60,17 +62,18 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/configuration-snippet: |
-        proxy_pass_request_headers  on;
-        proxy_set_header access-token $http_access_token;
+      proxy_pass_request_headers  on;
+      proxy_set_header access-token $http_access_token;
     nginx.ingress.kubernetes.io/cors-allow-origin: "https://app.pathmind.com"
     nginx.ingress.kubernetes.io/cors-allow-methods: "*"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
   hosts:
-    - host: ""
+    - host: "api.pathmind.com"
       paths: [/]
   tls:
     - secretName: letsencrypt-dev
       hosts:
-        - ""
+        - "api.pathmind.com"
 
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
