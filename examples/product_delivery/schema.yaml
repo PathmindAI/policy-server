@@ -1,52 +1,52 @@
 observations:
-    manufacturing_center_0_stock:
-      type: float
-    manufacturing_center_1_stock:
-      type: float
-    manufacturing_center_2_stock:
-      type: float
-    manufacturing_center_0_total_vehicles:
-      type: float
-    manufacturing_center_1_total_vehicles:
-      type: float
-    manufacturing_center_2_total_vehicles:
-      type: float
-    manufacturing_center_0_idle_vehicles:
-      type: float
-    manufacturing_center_1_idle_vehicles:
-      type: float
-    manufacturing_center_2_idle_vehicles:
-      type: float
-    distributor_0_order_amount:
-      type: float
-    distributor_1_order_amount:
-      type: float
-    distributor_2_order_amount:
-      type: float
-    distributor_3_order_amount:
-      type: float
-    distributor_4_order_amount:
-      type: float
-    distributor_5_order_amount:
-      type: float
-    distributor_6_order_amount:
-      type: float
-    distributor_7_order_amount:
-      type: float
-    distributor_8_order_amount:
-      type: float
-    distributor_9_order_amount:
-      type: float
-    distributor_10_order_amount:
-      type: float
-    distributor_11_order_amount:
-      type: float
-    distributor_12_order_amount:
-      type: float
-    distributor_13_order_amount:
-      type: float
-    distributor_14_order_amount:
-      type: float
+  manufacturing_center_0_stock:
+    type: float
+  manufacturing_center_1_stock:
+    type: float
+  manufacturing_center_2_stock:
+    type: float
+  manufacturing_center_0_total_vehicles:
+    type: float
+  manufacturing_center_1_total_vehicles:
+    type: float
+  manufacturing_center_2_total_vehicles:
+    type: float
+  manufacturing_center_0_idle_vehicles:
+    type: float
+  manufacturing_center_1_idle_vehicles:
+    type: float
+  manufacturing_center_2_idle_vehicles:
+    type: float
+  distributor_0_order_amount:
+    type: float
+  distributor_1_order_amount:
+    type: float
+  distributor_2_order_amount:
+    type: float
+  distributor_3_order_amount:
+    type: float
+  distributor_4_order_amount:
+    type: float
+  distributor_5_order_amount:
+    type: float
+  distributor_6_order_amount:
+    type: float
+  distributor_7_order_amount:
+    type: float
+  distributor_8_order_amount:
+    type: float
+  distributor_9_order_amount:
+    type: float
+  distributor_10_order_amount:
+    type: float
+  distributor_11_order_amount:
+    type: float
+  distributor_12_order_amount:
+    type: float
+  distributor_13_order_amount:
+    type: float
+  distributor_14_order_amount:
+    type: float
 
 parameters:
   discrete: True

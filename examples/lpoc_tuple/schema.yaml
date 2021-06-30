@@ -1,29 +1,29 @@
 observations:
-    # These observations need to be one-hot encoded by the client (no more preprocessing)
-    table_1_node:
-      type: List[int]
-    table_2_node:
-      type: List[int]
-    table_3_node:
-      type: List[int]
-    table_4_node:
-      type: List[int]
-    table_5_node:
-      type: List[int]
-    table_6_node:
-      type: List[int]
-    table_1_target_node:
-      type: List[int]
-    table_2_target_node:
-      type: List[int]
-    table_3_target_node:
-      type: List[int]
-    table_4_target_node:
-      type: List[int]
-    table_5_target_node:
-      type: List[int]
-    table_6_target_node:
-      type: List[int]
+  # These observations need to be one-hot encoded by the client (no more preprocessing)
+  table_1_node:
+    type: List[int]
+  table_2_node:
+    type: List[int]
+  table_3_node:
+    type: List[int]
+  table_4_node:
+    type: List[int]
+  table_5_node:
+    type: List[int]
+  table_6_node:
+    type: List[int]
+  table_1_target_node:
+    type: List[int]
+  table_2_target_node:
+    type: List[int]
+  table_3_target_node:
+    type: List[int]
+  table_4_target_node:
+    type: List[int]
+  table_5_target_node:
+    type: List[int]
+  table_6_target_node:
+    type: List[int]
 
 parameters:
   discrete: True

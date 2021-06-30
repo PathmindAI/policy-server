@@ -1,0 +1,2 @@
+helm/policy-server/templates/*.yaml
+helm/policy-server/templates/tests/*.yaml
