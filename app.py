@@ -3,7 +3,6 @@ import json
 import shutil
 from typing import List
 
-import numpy as np
 import ray
 import yaml
 from fastapi import Depends, FastAPI
@@ -15,15 +14,7 @@ from ray.rllib.evaluation.sample_batch_builder import SampleBatchBuilder
 from ray.rllib.offline.json_writer import JsonWriter
 
 import config
-from api import (
-    Action,
-    Experience,
-    Observation,
-    RawObservation,
-    _distribution,
-    _predict,
-    _predict_deterministic,
-)
+from api import Action, Observation, RawObservation
 from generate import CLI
 from offline import EpisodeCache
 from security import get_api_key
@@ -105,74 +96,6 @@ if config.observations:
         observations = list(itertools.chain(*lists))
         # Note that ray can't pickle the pydantic "Observation" model, so we need to convert it here.
         return await SERVE_HANDLE.remote(observations)
-
-    @app.post("/predict_deterministic/", response_model=Action, tags=["Predictions"])
-    async def predict_deterministic(
-        payload: Observation, api_key: APIKey = Depends(get_api_key)
-    ):
-        return _predict_deterministic(payload)
-
-    @app.post("/distribution/", tags=["Predictions"])
-    async def distribution(
-        payload: Observation, api_key: APIKey = Depends(get_api_key)
-    ):
-        return _distribution(payload)
-
-    @app.post("/collect_experience/", response_model=Action, tags=["Predictions"])
-    async def collect_experience(
-        payload: Experience, api_key: APIKey = Depends(get_api_key)
-    ):
-
-        global cache
-        global batch_builder
-
-        observation = payload.observation
-        rew = payload.reward
-        done = payload.done
-
-        lists = [
-            [getattr(observation, obs)]
-            if not isinstance(getattr(observation, obs), List)
-            else getattr(observation, obs)
-            for obs in config.observations.keys()
-        ]
-
-        obs = list(itertools.chain(*lists))
-        obs = np.reshape(np.asarray(obs), (4,))
-
-        action = _predict(obs)
-
-        # from client import prep
-        # print("The preprocessor is", prep)
-
-        if cache.is_empty():
-            cache.store(t=0, prev_obs=obs, prev_action=action.actions, prev_reward=rew)
-
-        act = action.actions[0]
-
-        batch_builder.add_values(
-            agent_index=0,
-            actions=act,
-            action_prob=action.probability,
-            action_logp=np.log(action.probability),
-            t=cache.t,
-            eps_id=cache.episode,
-            prev_actions=cache.prev_action,
-            prev_rewards=cache.prev_reward,
-            obs=cache.prev_obs,  # prep.transform(...)
-            # sent from environment
-            new_obs=obs,
-            dones=done,
-            infos=None,
-            rewards=rew,
-        )
-        cache.store(t=cache.t + 1, prev_obs=obs, prev_action=act, prev_reward=rew)
-
-        if done:
-            writer.write(batch_builder.build_and_reset())
-            cache.reset()
-
-        return action
 
 
 @app.post("/predict_raw/", response_model=Action, tags=["Predictions"])
