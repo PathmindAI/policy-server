@@ -13,8 +13,9 @@ def run_the_app():
     st.sidebar.markdown("# Server authentication")
 
     auth = None
-    user = st.sidebar.text_input("User name")
-    password = st.sidebar.text_input("Password")
+    user = st.sidebar.text_input("User name", "admin")
+    password = st.sidebar.text_input("Password", "admin")
+    token = st.sidebar.text_input("Token", "1234567asdfgh")
     if user and password:
         auth = (user, password)
 
@@ -32,17 +33,20 @@ def run_the_app():
         st.markdown(f"## Action: {response.get('actions')[0]}")
         st.markdown(f"## Probability: {int(100 *response.get('probability'))}%")
 
-    # compute_action_distro = st.checkbox(label="What's the variance of my actions?", value=False)
-    # if compute_action_distro and obs:
-    #     distro_dict: dict = distro(obs, auth, url).json()
-    #
-    #     import matplotlib.pyplot as plt
-    #     import numpy as np
-    #     arr = np.asarray(list(distro_dict.values()))
-    #     x_range = np.arange(len(distro_dict))
-    #     plt.bar(x_range, arr)
-    #     plt.xticks(x_range, list(distro_dict.keys()))
-    #     st.pyplot(plt)
+    compute_action_distro = st.checkbox(
+        label="What's the variance of my actions?", value=False
+    )
+    if compute_action_distro and obs:
+        distro_dict: dict = distro(obs, auth, url).json()
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        arr = np.asarray(list(distro_dict.values()))
+        x_range = np.arange(len(distro_dict))
+        plt.bar(x_range, arr)
+        plt.xticks(x_range, list(distro_dict.keys()))
+        st.pyplot(plt)
 
 
 def server_schema(auth, url):
@@ -65,6 +69,7 @@ def generate_frontend_from_observations(schema: dict):
     """
     properties = schema.get("observations")
     result = {}
+    print(f"schema: {schema}")
     for key, values in properties.items():
         prop_type = values.get("type")
         # example = values.get("example")

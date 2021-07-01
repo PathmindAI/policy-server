@@ -26,7 +26,7 @@ from api import (
 )
 from generate import CLI
 from offline import EpisodeCache
-from security import get_api_key
+from security import get_api_key, verify_credentials
 
 cache = EpisodeCache()
 batch_builder = SampleBatchBuilder()  # or MultiAgentSampleBatchBuilder
@@ -95,7 +95,9 @@ if config.USE_RAY:
 if config.observations:
     # Note: for basic auth, use "logged_in: bool = Depends(verify_credentials)" as parameter
     @app.post("/predict/", response_model=Action, tags=["Predictions"])
-    async def predict(payload: Observation, api_key: APIKey = Depends(get_api_key)):
+    async def predict(
+        payload: Observation, logged_in: bool = Depends(verify_credentials)
+    ):
         lists = [
             [getattr(payload, obs)]
             if not isinstance(getattr(payload, obs), List)
@@ -114,7 +116,7 @@ if config.observations:
 
     @app.post("/distribution/", tags=["Predictions"])
     async def distribution(
-        payload: Observation, api_key: APIKey = Depends(get_api_key)
+        payload: Observation, logged_in: bool = Depends(verify_credentials)
     ):
         return _distribution(payload)
 
@@ -187,7 +189,7 @@ async def clients(api_key: APIKey = Depends(get_api_key)):
 
 
 @app.get("/schema", tags=["Clients"])
-async def server_schema(api_key: APIKey = Depends(get_api_key)):
+async def server_schema(logged_in: bool = Depends(verify_credentials)):
     with open(config.PATHMIND_SCHEMA, "r") as schema_file:
         schema_str = schema_file.read()
     schema = yaml.safe_load(schema_str)
