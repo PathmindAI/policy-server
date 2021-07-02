@@ -6,8 +6,8 @@ parameters:
 observations:
   actionMask:
     type: List[bool]
-    min_items: 2
-    max_items: 2
+    min_items: 4
+    max_items: 4
   stateChartState:
     type: List[float]
     min_items: 3
