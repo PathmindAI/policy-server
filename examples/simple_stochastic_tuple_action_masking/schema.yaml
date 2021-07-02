@@ -1,0 +1,14 @@
+---
+parameters:
+  discrete: true
+  tuple: true
+  api_key: 1234567asdfgh
+observations:
+  actionMask:
+    type: List[bool]
+    min_items: 2
+    max_items: 2
+  stateChartState:
+    type: List[float]
+    min_items: 3
+    max_items: 3
