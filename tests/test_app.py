@@ -65,10 +65,9 @@ def test_predict():
 
 def test_clients():
     with TestClient(app) as client:
-        response = client.post(
-            "http://localhost:8000/clients/",
+        response = client.get(
+            "http://localhost:8000/clients",
             headers={"access-token": "1234567asdfgh"},
         )
-        assert response.status_code != 500
-        print(response)
+        assert response.status_code == 200
         ray.shutdown()
