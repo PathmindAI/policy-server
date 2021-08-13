@@ -6,18 +6,13 @@ import config
 from fluent import sender
 from fastapi import HTTPException
 
-logger = sender.FluentSender('policy_server', host='0.0.0.0', port=24224)
+logger = sender.FluentSender("policy_server", host="0.0.0.0", port=24224)
 
 
-RawObservation = create_model(
-    'RawObservation',
-    **{"obs": (List[float], ...)}
-)
+RawObservation = create_model("RawObservation", **{"obs": (List[float], ...)})
 
-Observation = create_model(
-    'Observation',
-    **config.payload_data
-)
+Observation = create_model("Observation", **config.payload_data)
+
 
 class Experience(BaseModel):
     observation: Observation
@@ -43,11 +38,14 @@ class PathmindPolicy:
     def __call__(self, request):
         array = np.asarray(request.data)
         op = np.reshape(array, (1, array.size))
-        tensors = tf.convert_to_tensor(op, dtype=tf.float32, name='observations')
+        tensors = tf.convert_to_tensor(op, dtype=tf.float32, name="observations")
 
         result = self.model(
-            is_training=self.is_training_tensor, observations=tensors, prev_action=self.prev_action_tensor,
-            prev_reward=self.prev_reward_tensor, seq_lens=self.seq_lens_tensor
+            is_training=self.is_training_tensor,
+            observations=tensors,
+            prev_action=self.prev_action_tensor,
+            prev_reward=self.prev_reward_tensor,
+            seq_lens=self.seq_lens_tensor,
         )
 
         action_keys = [k for k in result.keys() if "actions" in k]
@@ -64,7 +62,14 @@ class PathmindPolicy:
             actions = [config.action_type(x) for x in numpy_tensors]
 
         global logger
-        logger.emit('predict', {'observation': request.data, 'action': actions, 'probability': probability})
+        logger.emit(
+            "predict",
+            {
+                "observation": request.data,
+                "action": actions,
+                "probability": probability,
+            },
+        )
 
         return Action(actions=actions, probability=probability)
 
@@ -75,6 +80,7 @@ pm = PathmindPolicy()
 def _predict(payload: Observation):
     class Dummy:
         data = None
+
     dummy = Dummy()
     dummy.data = payload
     return pm(dummy)
@@ -85,9 +91,13 @@ def _predict_deterministic(payload: Observation):
     to restore the agent. Not in itself a problem, just less convenient compared
     to what we have now (don't need big JARs hanging around)."""
     if not config.parameters.get("discrete"):
-        raise HTTPException(status_code=405, detail="Endpoint only available for discrete actions")
+        raise HTTPException(
+            status_code=405, detail="Endpoint only available for discrete actions"
+        )
     if config.parameters.get("tuple"):
-        raise HTTPException(status_code=405, detail="Endpoint only available for non-tuple scenarios")
+        raise HTTPException(
+            status_code=405, detail="Endpoint only available for non-tuple scenarios"
+        )
 
     max_action = None
     max_prob = 0.0
@@ -106,9 +116,13 @@ def _predict_deterministic(payload: Observation):
 
 def _distribution(payload: Observation):
     if not config.parameters.get("discrete"):
-        raise HTTPException(status_code=405, detail="Endpoint only available for discrete actions")
+        raise HTTPException(
+            status_code=405, detail="Endpoint only available for discrete actions"
+        )
     if config.parameters.get("tuple"):
-        raise HTTPException(status_code=405, detail="Endpoint only available for non-tuple scenarios")
+        raise HTTPException(
+            status_code=405, detail="Endpoint only available for non-tuple scenarios"
+        )
     distro_dict = {}
     found_all_actions = False
     trials = 0

@@ -28,6 +28,6 @@ def unzip(local_file):
     """Unzip a file if it has a zip extension, otherwise leave as is."""
     extension = get_extension(local_file)
     if extension == "zip":
-        with zipfile.ZipFile(local_file, 'r') as zip_ref:
+        with zipfile.ZipFile(local_file, "r") as zip_ref:
             zip_ref.extractall(MODEL_FOLDER)
     print(">>> Successfully unzipped model.")

@@ -5,6 +5,7 @@ import config
 import subprocess
 from utils import safe_remove, unzip
 
+
 class CLI:
     """Simple wrapper class to expose to "fire" to auto-generate a command line
     interface for this project.
@@ -20,7 +21,7 @@ class CLI:
         generate_client_for("python")
         generate_client_for("java")
         generate_client_for("scala")
-        #generate_client_for("r")
+        # generate_client_for("r")
 
     @staticmethod
     def copy_server_files(path):
@@ -44,8 +45,19 @@ class CLI:
 
 def generate_client_for(lang):
     os.makedirs(f"./clients/{lang}")
-    subprocess.run(["swagger-codegen", "generate", "-i", config.LOCAL_SWAGGER, "-l", lang, "-o", f"clients/{lang}"])
+    subprocess.run(
+        [
+            "swagger-codegen",
+            "generate",
+            "-i",
+            config.LOCAL_SWAGGER,
+            "-l",
+            lang,
+            "-o",
+            f"clients/{lang}",
+        ]
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     fire.Fire(CLI)

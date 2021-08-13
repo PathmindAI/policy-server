@@ -44,7 +44,7 @@ class MouseAndCheese(Env):
             float(self.mouse[1]) / 5.0,
             abs(self.cheese[0] - self.mouse[0]) / 5.0,
             abs(self.cheese[1] - self.mouse[1]) / 5.0,
-            ]
+        ]
 
     def get_reward(self) -> float:
         return 1 if self.mouse == self.cheese else 0
@@ -65,11 +65,7 @@ def get_payload(obs, reward, done):
         "mouse_row_dist": obs[2],
         "mouse_col_dist": obs[3],
     }
-    payload = {
-        "observation": obs_dict,
-        "reward": reward,
-        "done": done
-    }
+    payload = {"observation": obs_dict, "reward": reward, "done": done}
     return payload
 
 
@@ -79,10 +75,14 @@ for episode in range(100):
     done = False
     while not done:
         payload = get_payload(obs, reward, done)
-        response = requests.post("http://localhost:8000/collect_experience/", json=payload, auth=auth).json()
+        response = requests.post(
+            "http://localhost:8000/collect_experience/", json=payload, auth=auth
+        ).json()
         action = response.get("actions")[0]
         obs, reward, done, info = env.step(action)
         if done:
             payload = get_payload(obs, reward, done)
-            response = requests.post("http://localhost:8000/collect_experience/", json=payload, auth=auth).json()
+            response = requests.post(
+                "http://localhost:8000/collect_experience/", json=payload, auth=auth
+            ).json()
             print(">>> Episode complete.")
