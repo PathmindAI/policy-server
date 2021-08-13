@@ -16,6 +16,10 @@ spec:
       labels:
         {{- include "policy-server.selectorLabels" . | nindent 8 }}
     spec:
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -25,6 +29,9 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          volumeMounts:
+            - mountPath: /dev/shm
+              name: dshm
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -38,14 +45,20 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port1 }}
               protocol: TCP
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: http
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 10
           env:
             - name: TUPLE
               value: "{{ .Values.env.TUPLE }}"

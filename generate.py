@@ -1,8 +1,10 @@
 import os
 import shutil
-import fire
-import config
 import subprocess
+
+import fire
+
+import config
 from utils import safe_remove, unzip
 
 
@@ -47,7 +49,7 @@ def generate_client_for(lang):
     os.makedirs(f"./clients/{lang}")
     subprocess.run(
         [
-            "swagger-codegen",
+            "./swagger-codegen",
             "generate",
             "-i",
             config.LOCAL_SWAGGER,

@@ -1,7 +1,9 @@
 """Basic configuration for the application."""
 import os
-import oyaml as yaml
 from collections import OrderedDict
+
+import oyaml as yaml
+from pydantic import Field
 
 USE_RAY = True
 
@@ -45,5 +47,14 @@ model_id = parameters.get("model_id", None)
 project_id = parameters.get("project_id", None)
 
 payload_data = {}
+# If the schema includes `max_items` set the constraints for the array
 if observations:
-    payload_data = {k: (v.get("type"), ...) for k, v in observations.items()}
+    payload_data = {
+        k: (
+            v.get("type"),
+            Field(..., max_items=v.get("max_items"), min_items=v.get("min_items"))
+            if v.get("max_items")
+            else ...,
+        )
+        for k, v in observations.items()
+    }

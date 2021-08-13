@@ -1,9 +1,15 @@
-"""This assumes the server is fully configured for the LPoC example"""
+import ray
 import timeit
-import requests
+from fastapi.testclient import TestClient
+
+from app import app
+from generate import CLI
+
+CLI.copy_server_files("examples/lpoc")
+client = TestClient(app)
 
 
-data = {
+payload = {
     "coordinates": [1, 1],
     "has_core": True,
     "has_down_neighbour": True,
@@ -21,15 +27,15 @@ data = {
 
 
 def predict():
-    return requests.post(
-        "https://localhost:8080/api/predict",
-        verify=False,
-        auth=("foo", "bar"),
-        json=data,
+    return client.post(
+        "http://localhost:8000/predict/",
+        json=payload,
+        headers={"access-token": "1234567asdfgh"},
     )
 
 
-predict()
-number = 1000
-res = timeit.timeit(predict, number=1000)
-print(f"A total of {number} requests took {res} milliseconds to process on average.")
+def test_predict():
+    number = 1000
+    res = timeit.timeit(predict, number=number)
+    print(f"A total of {number} requests took {res} milliseconds to process on average.")
+    ray.shutdown()

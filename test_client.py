@@ -1,6 +1,7 @@
 import typing
-from gym import Env, spaces
+
 import requests
+from gym import Env, spaces
 
 
 class MouseAndCheese(Env):

@@ -1,6 +1,8 @@
-from config import *
 import zipfile
+
 import tensorflow as tf
+
+from config import *
 
 
 def safe_remove(file_name):

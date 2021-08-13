@@ -1,18 +1,15 @@
-import ray
-from ray import serve
-import shutil
 import itertools
 import json
+import shutil
+from typing import List
+
+import ray
 import yaml
-import numpy as np
+from ray import serve
 
 import config
-from api import Action, Observation, Experience, RawObservation
-from api import _predict_deterministic, _distribution, _predict
-from typing import List
-from utils import unzip
+from api import Action, Observation, RawObservation
 from generate import CLI
-from offline import EpisodeCache
 from security import get_api_key
 
 from fastapi.responses import FileResponse
@@ -20,19 +17,13 @@ from fastapi import Depends
 from fastapi.security.api_key import APIKey
 from fastapi.openapi.utils import get_openapi
 
-from ray.rllib.evaluation.sample_batch_builder import SampleBatchBuilder
-from ray.rllib.offline.json_writer import JsonWriter
-
-cache = EpisodeCache()
-batch_builder = SampleBatchBuilder()  # or MultiAgentSampleBatchBuilder
-writer = JsonWriter(config.EXPERIENCE_LOCATION)
-
 from fastapi import FastAPI
 from docs import get_swagger_ui_html, get_redoc_html
 
 
-app = FastAPI(docs_url=None, redoc_url=None)
+url_path = config.parameters.get("url_path")
 
+app = FastAPI(root_path=f"/{url_path}", docs_url=None, redoc_url=None) if url_path else FastAPI(docs_url=None, redoc_url=None)
 
 @app.get("/docs", include_in_schema=False)
 def overridden_swagger():
@@ -55,7 +46,6 @@ def overridden_redoc():
         model_id=config.model_id,
     )
 
-
 tags_metadata = [
     {
         "name": "Predictions",
@@ -74,8 +64,6 @@ tags_metadata = [
 
 SERVE_HANDLE = None
 
-unzip(config.PATHMIND_POLICY)
-
 
 def custom_openapi():
     if app.openapi_schema:
@@ -89,6 +77,8 @@ def custom_openapi():
     openapi_schema["info"]["x-logo"] = {
         "url": "https://i2.wp.com/pathmind.com/wp-content/uploads/2020/07/pathmind-logo-blue.png?w=1176&ssl=1"
     }
+    if url_path:
+        openapi_schema["servers"] = [{"url": f"/{url_path}"}]
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 
@@ -98,18 +88,18 @@ if config.USE_RAY:
     @app.on_event("startup")
     async def startup_event():
 
-        ray.init(_metrics_export_port=8080)  # Initialize new ray instance
+        ray.init(num_cpus=4, _metrics_export_port=8080)  # Initialize new ray instance
         client = serve.start(http_host=None)
 
-        backend_config = serve.BackendConfig(num_replicas=4)
+        backend_config = serve.BackendConfig()
 
         from api import PathmindPolicy
 
-        client.create_backend("pathmind_policy", PathmindPolicy, config=backend_config)
-        client.create_endpoint("predict", backend="pathmind_policy")
+        serve.create_backend("pathmind_policy", PathmindPolicy, config=backend_config)
+        serve.create_endpoint("predict", backend="pathmind_policy")
 
         global SERVE_HANDLE
-        SERVE_HANDLE = client.get_handle("predict")
+        SERVE_HANDLE = serve.get_handle("predict")
 
 
 if config.observations:
@@ -125,74 +115,6 @@ if config.observations:
         observations = list(itertools.chain(*lists))
         # Note that ray can't pickle the pydantic "Observation" model, so we need to convert it here.
         return await SERVE_HANDLE.remote(observations)
-
-    @app.post("/predict_deterministic/", response_model=Action, tags=["Predictions"])
-    async def predict_deterministic(
-        payload: Observation, api_key: APIKey = Depends(get_api_key)
-    ):
-        return _predict_deterministic(payload)
-
-    @app.post("/distribution/", tags=["Predictions"])
-    async def distribution(
-        payload: Observation, api_key: APIKey = Depends(get_api_key)
-    ):
-        return _distribution(payload)
-
-    @app.post("/collect_experience/", response_model=Action, tags=["Predictions"])
-    async def collect_experience(
-        payload: Experience, api_key: APIKey = Depends(get_api_key)
-    ):
-
-        global cache
-        global batch_builder
-
-        observation = payload.observation
-        rew = payload.reward
-        done = payload.done
-
-        lists = [
-            [getattr(observation, obs)]
-            if not isinstance(getattr(observation, obs), List)
-            else getattr(observation, obs)
-            for obs in config.observations.keys()
-        ]
-
-        obs = list(itertools.chain(*lists))
-        obs = np.reshape(np.asarray(obs), (4,))
-
-        action = _predict(obs)
-
-        # from client import prep
-        # print("The preprocessor is", prep)
-
-        if cache.is_empty():
-            cache.store(t=0, prev_obs=obs, prev_action=action.actions, prev_reward=rew)
-
-        act = action.actions[0]
-
-        batch_builder.add_values(
-            agent_index=0,
-            actions=act,
-            action_prob=action.probability,
-            action_logp=np.log(action.probability),
-            t=cache.t,
-            eps_id=cache.episode,
-            prev_actions=cache.prev_action,
-            prev_rewards=cache.prev_reward,
-            obs=cache.prev_obs,  # prep.transform(...)
-            # sent from environment
-            new_obs=obs,
-            dones=done,
-            infos=None,
-            rewards=rew,
-        )
-        cache.store(t=cache.t + 1, prev_obs=obs, prev_action=act, prev_reward=rew)
-
-        if done:
-            writer.write(batch_builder.build_and_reset())
-            cache.reset()
-
-        return action
 
 
 @app.post("/predict_raw/", response_model=Action, tags=["Predictions"])

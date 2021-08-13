@@ -1,0 +1,23 @@
+---
+parameters:
+  discrete: true
+  tuple: true
+  api_key: 1234567asdfgh
+  url_path: api/v1
+observations:
+  currentCall:
+    type: List[float]
+    min_items: 5
+    max_items: 5
+  callCenters:
+    type: List[float]
+    min_items: 20
+    max_items: 20
+  links:
+    type: List[float]
+    min_items: 10
+    max_items: 10
+  hour:
+    type: float
+  minute:
+    type: float

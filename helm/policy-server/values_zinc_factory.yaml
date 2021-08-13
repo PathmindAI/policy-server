@@ -8,16 +8,14 @@ image:
   repository: 839270835622.dkr.ecr.us-east-1.amazonaws.com/policy-server
   tag: zinc_factory
   pullPolicy: Always
-  command: ["gunicorn"]
+  command: ["uvicorn"]
   args:
     - "app:app"
-    - "-b"
-    - ":8080"
-    - "-w"
-    - "4"
+    - "--host"
+    - "0.0.0.0"
 
 env:
-  TUPLE: "True"
+  TUPLE: "False"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -30,10 +28,12 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name:
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -43,11 +43,14 @@ securityContext: {}
 
 service:
   type: NodePort
-  port: 8080
+  port1: 8000
+  port2: 8080
+  port3: 8256
 
 ingress:
   enabled: false
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -63,12 +66,9 @@ resources:
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits:
-    cpu: 2
-    memory: 8Gi
   requests:
-    cpu: 1
-    memory: 2Gi
+    cpu: 250m
+    memory: 216m
 
 nodeSelector: {}
 
