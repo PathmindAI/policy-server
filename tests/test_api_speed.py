@@ -37,5 +37,7 @@ def predict():
 def test_predict():
     number = 1000
     res = timeit.timeit(predict, number=number)
-    print(f"A total of {number} requests took {res} milliseconds to process on average.")
+    print(
+        f"A total of {number} requests took {res} milliseconds to process on average."
+    )
     ray.shutdown()

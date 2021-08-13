@@ -37,4 +37,3 @@ def test_write_openapi_json():
         f.write(res.content.decode("utf-8"))
 
     ray.shutdown()
-

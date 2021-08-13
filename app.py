@@ -23,7 +23,12 @@ from docs import get_swagger_ui_html, get_redoc_html
 
 url_path = config.parameters.get("url_path")
 
-app = FastAPI(root_path=f"/{url_path}", docs_url=None, redoc_url=None) if url_path else FastAPI(docs_url=None, redoc_url=None)
+app = (
+    FastAPI(root_path=f"/{url_path}", docs_url=None, redoc_url=None)
+    if url_path
+    else FastAPI(docs_url=None, redoc_url=None)
+)
+
 
 @app.get("/docs", include_in_schema=False)
 def overridden_swagger():
@@ -45,6 +50,7 @@ def overridden_redoc():
         project_id=config.project_id,
         model_id=config.model_id,
     )
+
 
 tags_metadata = [
     {
