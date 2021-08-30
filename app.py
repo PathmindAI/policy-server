@@ -85,7 +85,7 @@ if config.USE_RAY:
 
 if config.observations:
     # Note: for basic auth, use "logged_in: bool = Depends(verify_credentials)" as parameter
-    @app.post("/predict/", response_model=Action, tags=["Predictions"])
+    @app.get("/predict/", response_model=Action, tags=["Predictions"])
     async def predict(payload: Observation, api_key: APIKey = Depends(get_api_key)):
         lists = [
             [getattr(payload, obs)]
@@ -98,7 +98,7 @@ if config.observations:
         return await SERVE_HANDLE.remote(observations)
 
 
-@app.post("/predict_raw/", response_model=Action, tags=["Predictions"])
+@app.get("/predict_raw/", response_model=Action, tags=["Predictions"])
 async def predict_raw(payload: RawObservation, api_key: APIKey = Depends(get_api_key)):
     return await SERVE_HANDLE.remote(payload.obs)
 
