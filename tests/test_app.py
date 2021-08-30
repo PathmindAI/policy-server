@@ -1,3 +1,4 @@
+import ray
 from fastapi.testclient import TestClient
 
 from app import app
@@ -59,3 +60,14 @@ def test_predict():
         assert response.json()
         assert len(response.json()["actions"]) == 1
         assert response.json()["probability"] >= 0
+        ray.shutdown()
+
+
+def test_clients():
+    with TestClient(app) as client:
+        response = client.get(
+            "http://localhost:8000/clients",
+            headers={"access-token": "1234567asdfgh"},
+        )
+        assert response.status_code == 200
+        ray.shutdown()
