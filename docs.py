@@ -32,7 +32,7 @@ def get_swagger_ui_html(
     if project_id and model_id:
         html += f"""
         <div
-         style="padding: 0 20px; box-sizing: border-box; margin: 0 auto; max-width: 1460px; 
+         style="padding: 0 20px; box-sizing: border-box; margin: 0 auto; max-width: 1460px;
                 width: 100%; margin-top: 20px">
             <a href=https://app.pathmind.com/project/{project_id}/model/{model_id}
             style="color: black; font-family: sans-serif; font-size:18px;"

@@ -1,5 +1,6 @@
-import ray
 import timeit
+
+import ray
 from fastapi.testclient import TestClient
 
 from app import app

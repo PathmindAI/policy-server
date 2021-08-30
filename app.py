@@ -5,21 +5,17 @@ from typing import List
 
 import ray
 import yaml
+from fastapi import Depends, FastAPI
+from fastapi.openapi.utils import get_openapi
+from fastapi.responses import FileResponse
+from fastapi.security.api_key import APIKey
 from ray import serve
 
 import config
 from api import Action, Observation, RawObservation
+from docs import get_redoc_html, get_swagger_ui_html
 from generate import CLI
 from security import get_api_key
-
-from fastapi.responses import FileResponse
-from fastapi import Depends
-from fastapi.security.api_key import APIKey
-from fastapi.openapi.utils import get_openapi
-
-from fastapi import FastAPI
-from docs import get_swagger_ui_html, get_redoc_html
-
 
 url_path = config.parameters.get("url_path")
 
