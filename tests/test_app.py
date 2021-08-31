@@ -1,16 +1,18 @@
 import ray
 from fastapi.testclient import TestClient
 
+import config
 from app import app
 from generate import CLI
 
+# Set up server
+CLI.copy_server_files("examples/mouse_and_cheese")
 client = TestClient(app)
 
 
 def setup_function():
     ray.shutdown()
-    # Set up server
-    CLI.copy_server_files("examples/mouse_and_cheese")
+    config.process_schema(config.PATHMIND_SCHEMA)
 
 
 def test_health_check():
