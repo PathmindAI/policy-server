@@ -36,25 +36,47 @@ USER_NAME = "admin"
 PASSWORD = "admin"
 
 
-with open(PATHMIND_SCHEMA, "r") as f:
-    schema: OrderedDict = yaml.safe_load(f.read())
+def process_schema(schema_file):
+    with open(schema_file, "r") as f:
+        schema: OrderedDict = yaml.safe_load(f.read())
 
-observations = schema.get("observations")
-parameters = schema.get("parameters")
-action_type = int if parameters.get("discrete") else float
+    observations = schema.get("observations")
+    parameters = schema.get("parameters")
+    action_type = int if parameters.get("discrete") else float
 
-model_id = parameters.get("model_id", None)
-project_id = parameters.get("project_id", None)
+    model_id = parameters.get("model_id", None)
+    project_id = parameters.get("project_id", None)
 
-payload_data = {}
-# If the schema includes `max_items` set the constraints for the array
-if observations:
-    payload_data = {
-        k: (
-            v.get("type"),
-            Field(..., max_items=v.get("max_items"), min_items=v.get("min_items"))
-            if v.get("max_items")
-            else ...,
-        )
-        for k, v in observations.items()
-    }
+    payload_data = {}
+    # If the schema includes `max_items` set the constraints for the array
+    if observations:
+        payload_data = {
+            k: (
+                v.get("type"),
+                Field(..., max_items=v.get("max_items"), min_items=v.get("min_items"))
+                if v.get("max_items")
+                else ...,
+            )
+            for k, v in observations.items()
+        }
+
+    return (
+        schema,
+        observations,
+        parameters,
+        action_type,
+        model_id,
+        project_id,
+        payload_data,
+    )
+
+
+(
+    schema,
+    observations,
+    parameters,
+    action_type,
+    model_id,
+    project_id,
+    payload_data,
+) = process_schema(PATHMIND_SCHEMA)
