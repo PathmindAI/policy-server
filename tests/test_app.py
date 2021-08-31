@@ -4,13 +4,13 @@ from fastapi.testclient import TestClient
 from app import app
 from generate import CLI
 
-# Set up server
-CLI.copy_server_files("examples/mouse_and_cheese")
 client = TestClient(app)
 
 
 def setup_function():
     ray.shutdown()
+    # Set up server
+    CLI.copy_server_files("examples/mouse_and_cheese")
 
 
 def test_health_check():
