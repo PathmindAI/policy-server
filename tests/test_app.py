@@ -60,6 +60,7 @@ def test_predict():
             json=payload,
             headers={"access-token": "1234567asdfgh"},
         )
+        assert response.text == "something"
         assert response.status_code == 200
         assert response.json()
         assert len(response.json()["actions"]) == 1
