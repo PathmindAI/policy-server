@@ -42,5 +42,5 @@ jobs:
         # config.py won't import if schema.yaml doesn't exist yet
         run: |
           cp examples/lpoc/schema.yaml .
-          python generate.py copy_server_files "examples/lpoc"
+          python generate.py copy_server_files "examples/mouse_and_cheese"
           pytest tests/
